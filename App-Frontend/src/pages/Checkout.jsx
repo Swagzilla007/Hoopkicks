@@ -19,7 +19,6 @@ import {
   DialogActions,
 } from '@mui/material';
 import { useCart } from '../context/CartContext';
-import { orderAPI } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 
 export default function Checkout() {
@@ -61,34 +60,26 @@ export default function Checkout() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      try {
-        const orderData = {
-          items: items.map(item => ({
-            product: item._id || item.id,
-            size: item.size,
-            quantity: item.quantity,
-            price: Number(item.price)
-          })),
-          shippingAddress: {
-            name: `${formData.firstName} ${formData.lastName}`,
-            email: formData.email,
-            address: formData.address,
-            city: formData.city,
-            postalCode: formData.postalCode,
-            phone: formData.phone
-          },
-          totalAmount: Number(getCartTotal().toFixed(2))
-        };
+      const orderData = {
+        items: items.map(item => ({
+          product: item._id || item.id,
+          size: item.size,
+          quantity: item.quantity,
+          price: Number(item.price)
+        })),
+        shippingAddress: {
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          address: formData.address,
+          city: formData.city,
+          postalCode: formData.postalCode,
+          phone: formData.phone
+        },
+        totalAmount: Number(getCartTotal().toFixed(2))
+      };
 
-        const { data } = await orderAPI.createOrder(orderData);
-        setOrderMessage("Order placed successfully! We'll contact you soon regarding your order. Thank you for shopping with us!");
-        setOpenDialog(true);
-        // Clear cart only after user clicks "Continue Shopping"
-      } catch (error) {
-        setErrors({ 
-          general: error.response?.data?.message || 'Error placing order' 
-        });
-      }
+      // Navigate to payment page with order data
+      navigate('/payment', { state: { orderData } });
     }
   };
 
