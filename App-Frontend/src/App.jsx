@@ -7,7 +7,12 @@ import Men from './pages/Men';
 import Women from './pages/Women';
 import Cart from './pages/Cart';
 import ProductDetails from './pages/ProductDetails';
+import Checkout from './pages/Checkout';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import { CartProvider } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const theme = createTheme({
   palette: {
@@ -34,18 +39,27 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <CartProvider>
-        <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/men" element={<Men />} />
-            <Route path="/women" element={<Women />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
-          </Routes>
-        </Router>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <Router>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/men" element={<Men />} />
+              <Route path="/women" element={<Women />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/checkout" element={
+                <ProtectedRoute>
+                  <Checkout />
+                </ProtectedRoute>
+              } />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </Router>
+        </CartProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
