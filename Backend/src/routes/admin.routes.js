@@ -10,7 +10,8 @@ import {
   deleteProduct,
   getDashboardStats,
   uploadImage,
-  deleteOrder
+  deleteOrder,
+  createAdmin
 } from '../controllers/admin.controller.js';
 
 const router = express.Router();
@@ -55,5 +56,8 @@ router.delete('/products/:id', deleteProduct);
 
 // Add new route for image upload
 router.post('/upload', upload.single('image'), uploadImage);
+
+// Add new route for admin registration
+router.post('/register', createAdmin);
 
 export default router;

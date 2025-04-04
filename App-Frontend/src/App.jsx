@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
 import Navbar from './layouts/Navbar';
+import Footer from './layouts/Footer';
 import Home from './pages/Home';
 import Men from './pages/Men';
 import Women from './pages/Women';
@@ -46,36 +48,45 @@ function App() {
       <AuthProvider>
         <CartProvider>
           <Router>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/men" element={<Men />} />
-              <Route path="/women" element={<Women />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/product/:id" element={<ProductDetails />} />
-              <Route path="/checkout" element={
-                <ProtectedRoute>
-                  <Checkout />
-                </ProtectedRoute>
-              } />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/admin" element={
-                <AdminRoute>
-                  <AdminDashboard />
-                </AdminRoute>
-              } />
-              <Route path="/admin/products" element={
-                <AdminRoute>
-                  <ManageProducts />
-                </AdminRoute>
-              } />
-              <Route path="/admin/orders" element={
-                <AdminRoute>
-                  <ManageOrders />
-                </AdminRoute>
-              } />
-            </Routes>
+            <Box sx={{ 
+              display: 'flex', 
+              flexDirection: 'column',
+              minHeight: '100vh'
+            }}>
+              <Navbar />
+              <Box sx={{ flex: 1 }}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/men" element={<Men />} />
+                  <Route path="/women" element={<Women />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/product/:id" element={<ProductDetails />} />
+                  <Route path="/checkout" element={
+                    <ProtectedRoute>
+                      <Checkout />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/admin" element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  } />
+                  <Route path="/admin/products" element={
+                    <AdminRoute>
+                      <ManageProducts />
+                    </AdminRoute>
+                  } />
+                  <Route path="/admin/orders" element={
+                    <AdminRoute>
+                      <ManageOrders />
+                    </AdminRoute>
+                  } />
+                </Routes>
+              </Box>
+              <Footer />
+            </Box>
           </Router>
         </CartProvider>
       </AuthProvider>

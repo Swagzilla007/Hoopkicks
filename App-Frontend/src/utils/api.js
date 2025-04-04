@@ -30,6 +30,7 @@ export const adminAPI = {
     },
   }),
   deleteOrder: (id) => api.delete(`/admin/orders/${id}`),
+  createAdmin: (adminData) => api.post('/admin/register', adminData),
 };
 
 export const orderAPI = {
