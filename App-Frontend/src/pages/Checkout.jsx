@@ -13,12 +13,18 @@ import {
   ListItemText,
   Divider,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
 import { useCart } from '../context/CartContext';
+import { orderAPI } from '../utils/api';
+import { useAuth } from '../context/AuthContext';
 
 export default function Checkout() {
   const navigate = useNavigate();
-  const { items, getCartTotal } = useCart();
+  const { items, getCartTotal, clearCart } = useCart();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -29,6 +35,9 @@ export default function Checkout() {
     phone: '',
   });
   const [errors, setErrors] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
+  const [orderMessage, setOrderMessage] = useState('');
+  const { user } = useAuth();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -49,13 +58,45 @@ export default function Checkout() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Here you would typically send the order to your backend
-      console.log('Order submitted:', { items, formData });
-      navigate('/order-confirmation');
+      try {
+        const orderData = {
+          items: items.map(item => ({
+            product: item._id || item.id,
+            size: item.size,
+            quantity: item.quantity,
+            price: Number(item.price)
+          })),
+          shippingAddress: {
+            name: `${formData.firstName} ${formData.lastName}`,
+            email: formData.email,
+            address: formData.address,
+            city: formData.city,
+            postalCode: formData.postalCode,
+            phone: formData.phone
+          },
+          totalAmount: Number(getCartTotal().toFixed(2))
+        };
+
+        const { data } = await orderAPI.createOrder(orderData);
+        console.log('Order response:', data); // Debug log
+        clearCart();
+        setOrderMessage(data.message);
+        setOpenDialog(true);
+      } catch (error) {
+        console.error('Order error:', error);
+        setErrors({ 
+          general: error.response?.data?.message || 'Error placing order' 
+        });
+      }
     }
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
+    navigate('/');
   };
 
   if (items.length === 0) {
@@ -195,6 +236,17 @@ export default function Checkout() {
           </Paper>
         </Grid>
       </Grid>
+      <Dialog open={openDialog} onClose={handleClose}>
+        <DialogTitle>Order Confirmation</DialogTitle>
+        <DialogContent>
+          <Typography>{orderMessage}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

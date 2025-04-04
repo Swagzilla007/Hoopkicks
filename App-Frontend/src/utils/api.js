@@ -30,3 +30,7 @@ export const adminAPI = {
     },
   }),
 };
+
+export const orderAPI = {
+  createOrder: (orderData) => api.post('/orders', orderData),
+};
