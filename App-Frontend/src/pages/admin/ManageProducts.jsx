@@ -39,6 +39,7 @@ export default function ManageProducts() {
     stock: ''
   });
   const [imagePreview, setImagePreview] = useState('');
+  const [additionalImages, setAdditionalImages] = useState(['', '', '']);
 
   useEffect(() => {
     fetchProducts();
@@ -64,9 +65,11 @@ export default function ManageProducts() {
         category: product.category,
         sizes: Array.isArray(product.sizes) ? product.sizes.join(', ') : product.sizes,
         image: product.image,
-        stock: product.stock.toString()
+        stock: product.stock.toString(),
+        additionalImages: product.additionalImages || []
       });
       setImagePreview(product.image);
+      setAdditionalImages(product.additionalImages || ['', '', '']);
     } else {
       setSelectedProduct(null);
       setFormData({
@@ -80,6 +83,7 @@ export default function ManageProducts() {
         stock: ''
       });
       setImagePreview('');
+      setAdditionalImages(['', '', '']);
     }
     setOpen(true);
     setError('');
@@ -113,6 +117,23 @@ export default function ManageProducts() {
     }
   };
 
+  const handleAdditionalImageUpload = async (event, index) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const { data } = await adminAPI.uploadImage(formData);
+      const newAdditionalImages = [...additionalImages];
+      newAdditionalImages[index] = data.imagePath;
+      setAdditionalImages(newAdditionalImages);
+    } catch (error) {
+      setError('Error uploading additional image');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -126,7 +147,8 @@ export default function ManageProducts() {
           ? formData.sizes.split(',').map(size => Number(size.trim()))
           : formData.sizes,
         image: formData.image,
-        stock: Number(formData.stock)
+        stock: Number(formData.stock),
+        additionalImages: additionalImages.filter(img => img !== '')
       };
 
       if (selectedProduct) {
@@ -309,6 +331,40 @@ export default function ManageProducts() {
                       />
                     </Button>
                   </Box>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" gutterBottom>Additional Images</Typography>
+                  <Grid container spacing={2}>
+                    {[0, 1, 2].map((index) => (
+                      <Grid item xs={12} sm={4} key={index}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                          {additionalImages[index] && (
+                            <Box
+                              component="img"
+                              src={additionalImages[index].startsWith('http') 
+                                ? additionalImages[index] 
+                                : `http://localhost:5000${additionalImages[index]}`}
+                              alt={`Additional ${index + 1}`}
+                              sx={{ width: 100, height: 100, objectFit: 'contain' }}
+                            />
+                          )}
+                          <Button
+                            component="label"
+                            variant="outlined"
+                            size="small"
+                          >
+                            Upload Image {index + 1}
+                            <input
+                              type="file"
+                              hidden
+                              accept="image/*"
+                              onChange={(e) => handleAdditionalImageUpload(e, index)}
+                            />
+                          </Button>
+                        </Box>
+                      </Grid>
+                    ))}
+                  </Grid>
                 </Grid>
               </Grid>
             </Box>

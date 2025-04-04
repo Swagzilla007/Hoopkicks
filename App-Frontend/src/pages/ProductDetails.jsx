@@ -27,6 +27,7 @@ export default function ProductDetails() {
   const { addToCart } = useCart();
   const { user } = useAuth();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -52,6 +53,10 @@ export default function ProductDetails() {
     setSnackbarOpen(true);
   };
 
+  const getImageUrl = (path) => {
+    return path?.startsWith('http') ? path : `http://localhost:5000${path}`;
+  };
+
   if (loading) return <CircularProgress />;
   if (!product) return <Typography>Product not found</Typography>;
 
@@ -64,10 +69,41 @@ export default function ProductDetails() {
               <CardMedia
                 component="img"
                 height="400"
-                image={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
+                image={selectedImage === 0 ? getImageUrl(product.image) : getImageUrl(product.additionalImages[selectedImage - 1])}
                 alt={product.name}
                 sx={{ objectFit: 'contain' }}
               />
+              <Box sx={{ display: 'flex', gap: 2, mt: 2, justifyContent: 'center' }}>
+                <Box
+                  component="img"
+                  src={getImageUrl(product.image)}
+                  alt="main"
+                  sx={{ 
+                    width: 80, 
+                    height: 80, 
+                    objectFit: 'contain',
+                    cursor: 'pointer',
+                    border: selectedImage === 0 ? '2px solid primary.main' : 'none'
+                  }}
+                  onClick={() => setSelectedImage(0)}
+                />
+                {product.additionalImages?.map((img, index) => (
+                  <Box
+                    key={index}
+                    component="img"
+                    src={getImageUrl(img)}
+                    alt={`additional ${index + 1}`}
+                    sx={{ 
+                      width: 80, 
+                      height: 80, 
+                      objectFit: 'contain',
+                      cursor: 'pointer',
+                      border: selectedImage === index + 1 ? '2px solid primary.main' : 'none'
+                    }}
+                    onClick={() => setSelectedImage(index + 1)}
+                  />
+                ))}
+              </Box>
             </Card>
           </Grid>
           <Grid item xs={12} md={6}>
