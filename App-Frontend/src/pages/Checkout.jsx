@@ -81,12 +81,10 @@ export default function Checkout() {
         };
 
         const { data } = await orderAPI.createOrder(orderData);
-        console.log('Order response:', data); // Debug log
-        clearCart();
-        setOrderMessage(data.message);
+        setOrderMessage("Order placed successfully! We'll contact you soon regarding your order. Thank you for shopping with us!");
         setOpenDialog(true);
+        // Clear cart only after user clicks "Continue Shopping"
       } catch (error) {
-        console.error('Order error:', error);
         setErrors({ 
           general: error.response?.data?.message || 'Error placing order' 
         });
@@ -95,6 +93,7 @@ export default function Checkout() {
   };
 
   const handleClose = () => {
+    clearCart(); // Clear cart when dialog is closed
     setOpenDialog(false);
     navigate('/');
   };
@@ -236,14 +235,33 @@ export default function Checkout() {
           </Paper>
         </Grid>
       </Grid>
-      <Dialog open={openDialog} onClose={handleClose}>
-        <DialogTitle>Order Confirmation</DialogTitle>
+      <Dialog 
+        open={openDialog} 
+        onClose={handleClose}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle sx={{ textAlign: 'center', color: 'success.main' }}>
+          Order Confirmation
+        </DialogTitle>
         <DialogContent>
-          <Typography>{orderMessage}</Typography>
+          <Box sx={{ textAlign: 'center', py: 2 }}>
+            <Typography variant="h6" gutterBottom color="success.main">
+              Success!
+            </Typography>
+            <Typography>
+              {orderMessage}
+            </Typography>
+          </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            OK
+          <Button 
+            onClick={handleClose} 
+            variant="contained" 
+            color="primary"
+            fullWidth
+          >
+            Continue Shopping
           </Button>
         </DialogActions>
       </Dialog>

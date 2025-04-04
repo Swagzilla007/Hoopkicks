@@ -4,11 +4,17 @@ import Product from '../models/Product.js';
 export const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
+      .populate({
+        path: 'items.product',
+        select: 'name price image'
+      })
       .populate('user', 'name email')
-      .populate('items.product')
       .sort({ createdAt: -1 });
+
+    console.log('Fetched orders:', orders); // Debug log
     res.json(orders);
   } catch (error) {
+    console.error('Error fetching orders:', error);
     res.status(500).json({ message: 'Error fetching orders' });
   }
 };
@@ -123,5 +129,29 @@ export const uploadImage = async (req, res) => {
     res.json({ imagePath });
   } catch (error) {
     res.status(500).json({ message: 'Error uploading image' });
+  }
+};
+
+export const deleteOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findById(id);
+    
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Restore product stock quantities
+    for (const item of order.items) {
+      await Product.findByIdAndUpdate(item.product, {
+        $inc: { stock: item.quantity }
+      });
+    }
+
+    await Order.findByIdAndDelete(id);
+    res.json({ message: 'Order deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting order:', error);
+    res.status(500).json({ message: 'Error deleting order' });
   }
 };

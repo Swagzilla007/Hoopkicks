@@ -29,6 +29,7 @@ export const adminAPI = {
       'Content-Type': 'multipart/form-data',
     },
   }),
+  deleteOrder: (id) => api.delete(`/admin/orders/${id}`),
 };
 
 export const orderAPI = {

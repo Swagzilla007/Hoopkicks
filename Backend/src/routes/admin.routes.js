@@ -9,7 +9,8 @@ import {
   updateProduct, 
   deleteProduct,
   getDashboardStats,
-  uploadImage
+  uploadImage,
+  deleteOrder
 } from '../controllers/admin.controller.js';
 
 const router = express.Router();
@@ -45,6 +46,7 @@ router.get('/dashboard', getDashboardStats);
 // Order routes
 router.get('/orders', getAllOrders);
 router.put('/orders/:id', updateOrder);
+router.delete('/orders/:id', deleteOrder);
 
 // Product routes
 router.post('/products', createProduct);
