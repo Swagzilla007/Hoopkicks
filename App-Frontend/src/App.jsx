@@ -13,6 +13,10 @@ import Register from './pages/Register';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import ManageProducts from './pages/admin/ManageProducts';
+import ManageOrders from './pages/admin/ManageOrders';
 
 const theme = createTheme({
   palette: {
@@ -56,6 +60,21 @@ function App() {
               } />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/admin" element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              } />
+              <Route path="/admin/products" element={
+                <AdminRoute>
+                  <ManageProducts />
+                </AdminRoute>
+              } />
+              <Route path="/admin/orders" element={
+                <AdminRoute>
+                  <ManageOrders />
+                </AdminRoute>
+              } />
             </Routes>
           </Router>
         </CartProvider>

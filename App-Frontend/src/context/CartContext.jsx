@@ -1,8 +1,10 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
+  const { user } = useAuth();
   const [items, setItems] = useState(() => {
     const savedCart = localStorage.getItem('cart');
     return savedCart ? JSON.parse(savedCart) : [];
@@ -13,6 +15,11 @@ export function CartProvider({ children }) {
   }, [items]);
 
   const addToCart = (product, size) => {
+    if (user?.role === 'admin') {
+      console.error('Admins cannot add items to cart');
+      return;
+    }
+
     setItems(currentItems => {
       const existingItem = currentItems.find(
         item => item.id === product.id && item.size === size

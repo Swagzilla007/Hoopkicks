@@ -16,3 +16,12 @@ export const productAPI = {
   getProduct: (id) => api.get(`/products/${id}`),
   getProductsByCategory: (category) => api.get(`/products/category/${category}`)
 };
+
+export const adminAPI = {
+  getDashboardStats: () => api.get('/admin/dashboard'),
+  getAllOrders: () => api.get('/admin/orders'),
+  updateOrder: (id, status) => api.put(`/admin/orders/${id}`, { status }),
+  createProduct: (productData) => api.post('/admin/products', productData),
+  updateProduct: (id, productData) => api.put(`/admin/products/${id}`, productData),
+  deleteProduct: (id) => api.delete(`/admin/products/${id}`)
+};

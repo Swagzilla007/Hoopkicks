@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext';
 
 export default function ProductCard({ product }) {
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addToCart, isAdmin } = useCart();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -38,26 +38,30 @@ export default function ProductCard({ product }) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" color="primary" onClick={handleClick}>
-          Add to Cart
-        </Button>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          {product.sizes.map((size) => (
-            <MenuItem key={size} onClick={() => handleAddToCart(size)}>
-              Size {size}
-            </MenuItem>
-          ))}
-        </Menu>
+        {!isAdmin && (
+          <Button size="small" color="primary" onClick={handleClick}>
+            Add to Cart
+          </Button>
+        )}
+        {!isAdmin && (
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            {product.sizes.map((size) => (
+              <MenuItem key={size} onClick={() => handleAddToCart(size)}>
+                Size {size}
+              </MenuItem>
+            ))}
+          </Menu>
+        )}
         <Button 
           size="small" 
           color="primary" 
           onClick={() => navigate(`/product/${product._id}`)}
         >
-          View Details
+          {isAdmin ? 'Edit Product' : 'View Details'}
         </Button>
       </CardActions>
     </Card>

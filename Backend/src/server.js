@@ -7,9 +7,13 @@ import './models/User.js';
 import './models/Product.js';
 import './models/Order.js';
 
+import { setupInitialAdmin } from './controllers/auth.controller.js';
+
 mongoose.connect(config.MONGODB_URI)
-  .then(() => {
+  .then(async () => {
     console.log('Connected to MongoDB');
+    // Create initial admin user
+    await setupInitialAdmin();
   })
   .catch(err => console.error('MongoDB connection error:', err));
 

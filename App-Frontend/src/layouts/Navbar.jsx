@@ -21,6 +21,12 @@ export default function Navbar() {
           <Button color="inherit" component={Link} to="/men">Men</Button>
           <Button color="inherit" component={Link} to="/women">Women</Button>
           
+          {user?.role === 'admin' && (
+            <Button color="inherit" component={Link} to="/admin">
+              Admin Dashboard
+            </Button>
+          )}
+          
           {/* Auth Buttons */}
           {user ? (
             <>
