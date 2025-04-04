@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Container, Typography, Grid, Paper, Box, CircularProgress } from '@mui/material';
 import { adminAPI } from '../../utils/api';
+import AdminLayout from '../../layouts/AdminLayout';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
@@ -30,42 +31,44 @@ export default function AdminDashboard() {
   }
 
   return (
-    <Container sx={{ mt: 4 }}>
-      <Typography variant="h4" gutterBottom>Admin Dashboard</Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6">Total Products</Typography>
-            <Box sx={{ fontSize: '2rem', fontWeight: 'bold' }}>
-              {stats?.totalProducts || 0}
-            </Box>
-          </Paper>
+    <AdminLayout>
+      <Container sx={{ mt: 4 }}>
+        <Typography variant="h4" gutterBottom>Admin Dashboard</Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Paper sx={{ p: 3 }}>
+              <Typography variant="h6">Total Products</Typography>
+              <Box sx={{ fontSize: '2rem', fontWeight: 'bold' }}>
+                {stats?.totalProducts || 0}
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Paper sx={{ p: 3 }}>
+              <Typography variant="h6">Total Orders</Typography>
+              <Box sx={{ fontSize: '2rem', fontWeight: 'bold' }}>
+                {stats?.totalOrders || 0}
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Paper sx={{ p: 3 }}>
+              <Typography variant="h6">Pending Orders</Typography>
+              <Box sx={{ fontSize: '2rem', fontWeight: 'bold' }}>
+                {stats?.pendingOrders || 0}
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Paper sx={{ p: 3 }}>
+              <Typography variant="h6">Total Revenue</Typography>
+              <Box sx={{ fontSize: '2rem', fontWeight: 'bold' }}>
+                ${stats?.revenue?.toFixed(2) || '0.00'}
+              </Box>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6">Total Orders</Typography>
-            <Box sx={{ fontSize: '2rem', fontWeight: 'bold' }}>
-              {stats?.totalOrders || 0}
-            </Box>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6">Pending Orders</Typography>
-            <Box sx={{ fontSize: '2rem', fontWeight: 'bold' }}>
-              {stats?.pendingOrders || 0}
-            </Box>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6">Total Revenue</Typography>
-            <Box sx={{ fontSize: '2rem', fontWeight: 'bold' }}>
-              ${stats?.revenue?.toFixed(2) || '0.00'}
-            </Box>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </AdminLayout>
   );
 }

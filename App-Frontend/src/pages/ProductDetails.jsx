@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { useCart } from '../context/CartContext';
 import { productAPI } from '../utils/api';
+import { useAuth } from '../context/AuthContext';
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -23,6 +24,7 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [size, setSize] = useState('');
   const { addToCart } = useCart();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -58,7 +60,7 @@ export default function ProductDetails() {
             <CardMedia
               component="img"
               height="400"
-              image={product.image}
+              image={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
               alt={product.name}
               sx={{ objectFit: 'contain' }}
             />
@@ -78,25 +80,29 @@ export default function ProductDetails() {
             <Typography variant="subtitle1">Brand: {product.brand}</Typography>
             <Typography variant="subtitle1">Color: {product.color}</Typography>
           </Box>
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Size</InputLabel>
-            <Select value={size} onChange={handleSizeChange} label="Size">
-              {product.sizes.map((size) => (
-                <MenuItem key={size} value={size}>US {size}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Button 
-            variant="contained" 
-            color="primary" 
-            size="large" 
-            fullWidth 
-            sx={{ mt: 2 }}
-            disabled={!size}
-            onClick={handleAddToCart}
-          >
-            Add to Cart
-          </Button>
+          {user?.role !== 'admin' && (
+            <>
+              <FormControl fullWidth margin="normal">
+                <InputLabel>Size</InputLabel>
+                <Select value={size} onChange={handleSizeChange} label="Size">
+                  {product.sizes.map((size) => (
+                    <MenuItem key={size} value={size}>US {size}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Button 
+                variant="contained" 
+                color="primary" 
+                size="large" 
+                fullWidth 
+                sx={{ mt: 2 }}
+                disabled={!size}
+                onClick={handleAddToCart}
+              >
+                Add to Cart
+              </Button>
+            </>
+          )}
         </Grid>
       </Grid>
     </Container>

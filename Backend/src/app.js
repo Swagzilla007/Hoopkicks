@@ -4,6 +4,11 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes.js';
 import productRoutes from './routes/product.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -12,6 +17,10 @@ app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true
 }));
+
+// Serve static files from public directory
+app.use('/assets', express.static(path.join(__dirname, '../public/assets')));
+
 app.use(express.json());
 app.use(cookieParser());
 

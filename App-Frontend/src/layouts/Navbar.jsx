@@ -16,15 +16,20 @@ export default function Navbar() {
           HoopKicks
         </Typography>
         
-        {/* Navigation Links */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Button color="inherit" component={Link} to="/men">Men</Button>
           <Button color="inherit" component={Link} to="/women">Women</Button>
           
-          {user?.role === 'admin' && (
+          {user?.role === 'admin' ? (
             <Button color="inherit" component={Link} to="/admin">
               Admin Dashboard
             </Button>
+          ) : (
+            <IconButton color="inherit" component={Link} to="/cart">
+              <Badge badgeContent={cartItemCount} color="secondary">
+                <ShoppingCart />
+              </Badge>
+            </IconButton>
           )}
           
           {/* Auth Buttons */}
@@ -47,13 +52,6 @@ export default function Navbar() {
               </Button>
             </>
           )}
-          
-          {/* Cart Icon */}
-          <IconButton color="inherit" component={Link} to="/cart">
-            <Badge badgeContent={cartItemCount} color="secondary">
-              <ShoppingCart />
-            </Badge>
-          </IconButton>
         </Box>
       </Toolbar>
     </AppBar>

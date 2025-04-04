@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Card, CardMedia, CardContent, Typography, Button, CardActions, Menu, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 export default function ProductCard({ product }) {
   const navigate = useNavigate();
-  const { addToCart, isAdmin } = useCart();
+  const { addToCart } = useCart();
+  const { user } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -26,8 +28,9 @@ export default function ProductCard({ product }) {
       <CardMedia
         component="img"
         height="200"
-        image={product.image}
-        alt={product.name} 
+        image={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
+        alt={product.name}
+        sx={{ objectFit: 'contain' }}
       />
       <CardContent>
         <Typography gutterBottom variant="h6">
@@ -38,30 +41,28 @@ export default function ProductCard({ product }) {
         </Typography>
       </CardContent>
       <CardActions>
-        {!isAdmin && (
+        {user?.role !== 'admin' && (
           <Button size="small" color="primary" onClick={handleClick}>
             Add to Cart
           </Button>
         )}
-        {!isAdmin && (
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            {product.sizes.map((size) => (
-              <MenuItem key={size} onClick={() => handleAddToCart(size)}>
-                Size {size}
-              </MenuItem>
-            ))}
-          </Menu>
-        )}
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          {product.sizes.map((size) => (
+            <MenuItem key={size} onClick={() => handleAddToCart(size)}>
+              Size {size}
+            </MenuItem>
+          ))}
+        </Menu>
         <Button 
           size="small" 
           color="primary" 
           onClick={() => navigate(`/product/${product._id}`)}
         >
-          {isAdmin ? 'Edit Product' : 'View Details'}
+          View Details
         </Button>
       </CardActions>
     </Card>
