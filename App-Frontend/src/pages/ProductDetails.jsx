@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { 
   Container, 
@@ -11,25 +11,33 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  CircularProgress
 } from '@mui/material';
 import { useCart } from '../context/CartContext';
+import { productAPI } from '../utils/api';
 
 export default function ProductDetails() {
   const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [size, setSize] = useState('');
   const { addToCart } = useCart();
-  
-  const product = {
-    id,
-    name: 'Nike LeBron XX',
-    price: 199.99,
-    description: 'The Nike LeBron XX basketball shoes feature responsive cushioning and robust support for explosive plays on the court.',
-    sizes: [7, 8, 9, 10, 11, 12],
-    image: '/placeholder.jpg',
-    brand: 'Nike',
-    color: 'Black/Gold'
-  };
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const { data } = await productAPI.getProduct(id);
+        setProduct(data);
+      } catch (error) {
+        console.error('Error fetching product:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
 
   const handleSizeChange = (event) => {
     setSize(event.target.value);
@@ -39,7 +47,8 @@ export default function ProductDetails() {
     addToCart(product, size);
   };
 
-  if (!product) return null;
+  if (loading) return <CircularProgress />;
+  if (!product) return <Typography>Product not found</Typography>;
 
   return (
     <Container>

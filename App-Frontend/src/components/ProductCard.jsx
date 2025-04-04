@@ -46,13 +46,17 @@ export default function ProductCard({ product }) {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          {[7, 8, 9, 10, 11, 12].map((size) => (
+          {product.sizes.map((size) => (
             <MenuItem key={size} onClick={() => handleAddToCart(size)}>
               Size {size}
             </MenuItem>
           ))}
         </Menu>
-        <Button size="small" color="primary" onClick={() => navigate(`/product/${product.id}`)}>
+        <Button 
+          size="small" 
+          color="primary" 
+          onClick={() => navigate(`/product/${product._id}`)}
+        >
           View Details
         </Button>
       </CardActions>

@@ -1,11 +1,34 @@
-import { Container, Typography, Grid } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Container, Typography, Grid, CircularProgress } from '@mui/material';
 import ProductCard from '../components/ProductCard';
+import { productAPI } from '../utils/api';
 
 export default function Home() {
-  const featuredProducts = [
-    { id: 1, name: 'Nike Air Jordan', price: 199.99, image: 'placeholder.jpg' },
-    { id: 2, name: 'Adidas Pro', price: 159.99, image: 'placeholder.jpg' },
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const { data } = await productAPI.getAllProducts();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return (
+      <Container sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
 
   return (
     <Container sx={{ mt: 4 }}>
@@ -16,8 +39,8 @@ export default function Home() {
         Featured Products
       </Typography>
       <Grid container spacing={3}>
-        {featuredProducts.map(product => (
-          <Grid item xs={12} sm={6} md={4} key={product.id}>
+        {products.map(product => (
+          <Grid item xs={12} sm={6} md={4} key={product._id}>
             <ProductCard product={product} />
           </Grid>
         ))}

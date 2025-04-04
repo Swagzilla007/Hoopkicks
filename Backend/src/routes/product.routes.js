@@ -3,8 +3,8 @@ import { getAllProducts, getProduct, getProductsByCategory } from '../controller
 
 const router = express.Router();
 
-router.get('/', getAllProducts);
+router.get('/category/:category', getProductsByCategory); // Move this route first
 router.get('/:id', getProduct);
-router.get('/category/:category', getProductsByCategory);
+router.get('/', getAllProducts);
 
 export default router;

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { authAPI } from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -17,25 +18,32 @@ export function AuthProvider({ children }) {
   }, [user]);
 
   const login = async (email, password) => {
-    // Simulate API call
-    if (email && password) {
-      setUser({ email, name: email.split('@')[0] });
+    try {
+      const { data } = await authAPI.login({ email, password });
+      setUser(data.user);
       return true;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Login failed');
     }
-    throw new Error('Invalid credentials');
   };
 
   const register = async (email, password, name) => {
-    // Simulate API call
-    if (email && password && name) {
-      setUser({ email, name });
+    try {
+      const { data } = await authAPI.register({ email, password, name });
+      setUser(data.user);
       return true;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Registration failed');
     }
-    throw new Error('Registration failed');
   };
 
-  const logout = () => {
-    setUser(null);
+  const logout = async () => {
+    try {
+      await authAPI.logout();
+      setUser(null);
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   return (
