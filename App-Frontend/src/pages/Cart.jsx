@@ -38,7 +38,7 @@ export default function Cart() {
               >
                 <ListItemText 
                   primary={`${item.name} (Size: ${item.size})`}
-                  secondary={`$${item.price}`}
+                  secondary={`Rs. ${item.price.toLocaleString()}`}
                 />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
                   <IconButton onClick={() => handleQuantityChange(item.id, item.size, item.quantity - 1)}>
@@ -54,7 +54,7 @@ export default function Cart() {
           </List>
           <Box sx={{ mt: 4, textAlign: 'right' }}>
             <Typography variant="h6" gutterBottom>
-              Total: ${getCartTotal().toFixed(2)}
+              Total: Rs. {getCartTotal().toLocaleString()}
             </Typography>
             <Button 
               variant="contained" 

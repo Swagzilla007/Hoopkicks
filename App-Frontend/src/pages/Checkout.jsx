@@ -65,7 +65,7 @@ export default function Checkout() {
           product: item._id || item.id,
           size: item.size,
           quantity: item.quantity,
-          price: Number(item.price)
+          price: item.price // Price is already in LKR
         })),
         shippingAddress: {
           name: `${formData.firstName} ${formData.lastName}`,
@@ -75,10 +75,9 @@ export default function Checkout() {
           postalCode: formData.postalCode,
           phone: formData.phone
         },
-        totalAmount: Number(getCartTotal().toFixed(2))
+        totalAmount: getCartTotal() // Total is already in LKR
       };
 
-      // Navigate to payment page with order data
       navigate('/payment', { state: { orderData } });
     }
   };
@@ -205,14 +204,14 @@ export default function Checkout() {
                     primary={item.name}
                     secondary={`Size: ${item.size} | Quantity: ${item.quantity}`}
                   />
-                  <Typography>${(item.price * item.quantity).toFixed(2)}</Typography>
+                  <Typography>Rs. {(item.price * item.quantity).toLocaleString()}</Typography>
                 </ListItem>
               ))}
             </List>
             <Divider sx={{ my: 2 }} />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
               <Typography variant="h6">Total:</Typography>
-              <Typography variant="h6">${getCartTotal().toFixed(2)}</Typography>
+              <Typography variant="h6">Rs. {getCartTotal().toLocaleString()}</Typography>
             </Box>
             <Button
               variant="contained"

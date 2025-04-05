@@ -196,7 +196,7 @@ export default function ManageProducts() {
                 <TableCell>Name</TableCell>
                 <TableCell>Brand</TableCell>
                 <TableCell>Category</TableCell>
-                <TableCell>Price</TableCell>
+                <TableCell>Price (LKR)</TableCell>
                 <TableCell>Stock</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
@@ -207,7 +207,7 @@ export default function ManageProducts() {
                   <TableCell>{product.name}</TableCell>
                   <TableCell>{product.brand}</TableCell>
                   <TableCell>{product.category}</TableCell>
-                  <TableCell>${product.price}</TableCell>
+                  <TableCell>Rs. {product.price.toLocaleString()}</TableCell>
                   <TableCell>{product.stock}</TableCell>
                   <TableCell>
                     <IconButton onClick={() => handleOpen(product)} color="primary">
@@ -262,11 +262,12 @@ export default function ManageProducts() {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label="Price"
+                    label="Price (LKR)"
                     type="number"
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     required
+                    helperText="Enter price in Sri Lankan Rupees"
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>

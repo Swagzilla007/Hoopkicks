@@ -14,6 +14,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Payment from './pages/Payment';
 import OrderSuccess from './pages/OrderSuccess';
+import AboutUs from './pages/AboutUs';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -59,6 +60,7 @@ function App() {
               <Box sx={{ flex: 1 }}>
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<AboutUs />} />
                   <Route path="/men" element={<Men />} />
                   <Route path="/women" element={<Women />} />
                   <Route path="/cart" element={<Cart />} />

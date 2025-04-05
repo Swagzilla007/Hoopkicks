@@ -110,7 +110,8 @@ export const getDashboardStats = async (req, res) => {
       totalProducts: products,
       totalOrders: orders.length,
       pendingOrders: orders.filter(order => order.status === 'pending').length,
-      revenue: orders.reduce((total, order) => total + order.totalAmount, 0)
+      revenue: orders.reduce((total, order) => total + order.totalAmount, 0),
+      currency: 'LKR' // Add currency indicator
     };
 
     res.json(stats);

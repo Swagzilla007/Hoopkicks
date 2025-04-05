@@ -19,6 +19,7 @@ export default function Navbar() {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Button color="inherit" component={Link} to="/men">Men</Button>
           <Button color="inherit" component={Link} to="/women">Women</Button>
+          <Button color="inherit" component={Link} to="/about">About Us</Button>
           
           {user?.role === 'admin' ? (
             <Button color="inherit" component={Link} to="/admin">

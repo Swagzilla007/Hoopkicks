@@ -31,17 +31,17 @@ export const createOrder = async (req, res) => {
       });
     }
 
-    // Create new order
+    // Create new order - price is already in LKR from frontend
     const order = new Order({
       user: req.user.id,
       items: items.map(item => ({
         product: item.product,
         size: item.size,
         quantity: item.quantity,
-        price: item.price
+        price: item.price // Price is already in LKR
       })),
       shippingAddress,
-      totalAmount,
+      totalAmount, // Total amount is already in LKR
       status: 'pending'
     });
 

@@ -107,7 +107,7 @@ export default function AdminDashboard() {
             <Paper sx={{ p: 3 }}>
               <Typography variant="h6">Total Revenue</Typography>
               <Box sx={{ fontSize: '2rem', fontWeight: 'bold' }}>
-                ${stats?.revenue?.toFixed(2) || '0.00'}
+                Rs. {stats?.revenue?.toLocaleString() || '0'}
               </Box>
             </Paper>
           </Grid>

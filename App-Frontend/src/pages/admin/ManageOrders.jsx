@@ -93,11 +93,11 @@ export default function ManageOrders() {
                   <TableCell>
                     {order.items.map((item, idx) => (
                       <Typography key={idx} variant="body2">
-                        {item.product?.name} - Size {item.size} (x{item.quantity})
+                        {item.product?.name} - Size {item.size} (x{item.quantity}) - Rs. {item.price.toLocaleString()}
                       </Typography>
                     ))}
                   </TableCell>
-                  <TableCell>${order.totalAmount?.toFixed(2)}</TableCell>
+                  <TableCell>Rs. {order.totalAmount?.toLocaleString()}</TableCell>
                   <TableCell>
                     <Select
                       value={order.status}

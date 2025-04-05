@@ -112,7 +112,7 @@ export default function Payment() {
               Order Summary
             </Typography>
             <Typography variant="body1" sx={{ mb: 2 }}>
-              Total Amount: ${state.orderData.totalAmount.toFixed(2)}
+              Total Amount: Rs. {state.orderData.totalAmount.toLocaleString()}
             </Typography>
 
             <Button

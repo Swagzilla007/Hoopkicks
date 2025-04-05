@@ -40,7 +40,7 @@ export default function ProductCard({ product }) {
             {product.name}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            ${product.price}
+            Rs. {product.price.toLocaleString()}
           </Typography>
         </CardContent>
         <CardActions>
