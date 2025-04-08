@@ -43,9 +43,20 @@ export const createProduct = async (req, res) => {
         size: Number(size.size),
         stock: Number(size.stock)
       })),
+      // Ensure image path starts with http or /assets
       image: req.body.image.startsWith('http') 
         ? req.body.image 
-        : `http://localhost:5000${req.body.image}`
+        : !req.body.image.startsWith('/assets')
+          ? `/assets/products/${req.body.image}`
+          : req.body.image,
+      // Handle additional images similarly
+      additionalImages: req.body.additionalImages?.map(img => 
+        img.startsWith('http') 
+          ? img 
+          : !img.startsWith('/assets')
+            ? `/assets/products/${img}`
+            : img
+      )
     };
     
     const product = await Product.create(productData);

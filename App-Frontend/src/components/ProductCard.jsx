@@ -4,6 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
+const getImageUrl = (path) => {
+  if (!path) return '';
+  if (path.startsWith('http')) return path;
+  return `http://localhost:5000${path}`;
+};
+
 export default function ProductCard({ product }) {
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -50,7 +56,7 @@ export default function ProductCard({ product }) {
         <CardMedia
           component="img"
           height="200"
-          image={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
+          image={getImageUrl(product.image)}
           alt={product.name}
           sx={{ objectFit: 'contain' }}
         />
