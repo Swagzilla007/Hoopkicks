@@ -118,17 +118,17 @@ export default function ProductDetails() {
             </Typography>
             <Box sx={{ mb: 3 }}>
               <Typography variant="subtitle1">Brand: {product.brand}</Typography>
-              <Typography variant="subtitle1">Stock Available: {product.stock} units</Typography>
-              {product.stock <= 5 && product.stock > 0 && (
-                <Typography variant="subtitle2" color="warning.main">
-                  Only {product.stock} left in stock - order soon!
+              {product.sizes.map((sizeData) => (
+                <Typography key={sizeData.size} variant="subtitle2">
+                  Size {sizeData.size}: {sizeData.stock} units available
+                  {sizeData.stock <= 5 && sizeData.stock > 0 && (
+                    <span style={{ color: 'orange' }}> (Low Stock)</span>
+                  )}
+                  {sizeData.stock === 0 && (
+                    <span style={{ color: 'red' }}> (Out of Stock)</span>
+                  )}
                 </Typography>
-              )}
-              {product.stock === 0 && (
-                <Typography variant="subtitle2" color="error">
-                  Out of Stock
-                </Typography>
-              )}
+              ))}
             </Box>
             {user?.role !== 'admin' && (
               <>
@@ -138,10 +138,15 @@ export default function ProductDetails() {
                     value={size} 
                     onChange={handleSizeChange} 
                     label="Size"
-                    disabled={product.stock === 0}
                   >
-                    {product.sizes.map((size) => (
-                      <MenuItem key={size} value={size}>US {size}</MenuItem>
+                    {product.sizes.map((sizeData) => (
+                      <MenuItem 
+                        key={sizeData.size} 
+                        value={sizeData.size}
+                        disabled={sizeData.stock === 0}
+                      >
+                        US {sizeData.size} ({sizeData.stock} available)
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -151,10 +156,12 @@ export default function ProductDetails() {
                   size="large" 
                   fullWidth 
                   sx={{ mt: 2 }}
-                  disabled={!size || product.stock === 0}
+                  disabled={!size || !product.sizes.find(s => s.size === size)?.stock}
                   onClick={handleAddToCart}
                 >
-                  {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                  {!size ? 'Select Size' : 
+                   !product.sizes.find(s => s.size === size)?.stock ? 
+                   'Out of Stock' : 'Add to Cart'}
                 </Button>
               </>
             )}

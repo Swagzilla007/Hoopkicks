@@ -20,21 +20,31 @@ export function CartProvider({ children }) {
       return;
     }
 
+    const sizeData = product.sizes.find(s => s.size === size);
+    if (!sizeData || sizeData.stock === 0) {
+      return false;
+    }
+
     setItems(currentItems => {
       const existingItem = currentItems.find(
         item => item.id === product.id && item.size === size
       );
 
       if (existingItem) {
-        return currentItems.map(item =>
-          item.id === product.id && item.size === size
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
+        // Just return current items without modification when item exists
+        // to avoid triggering unnecessary updates
+        return currentItems;
       }
 
-      return [...currentItems, { ...product, size, quantity: 1 }];
+      // Add new item with quantity 1
+      return [...currentItems, { 
+        ...product, 
+        size, 
+        quantity: 1,
+        stock: sizeData.stock
+      }];
     });
+    return true;
   };
 
   const removeFromCart = (productId, size) => {

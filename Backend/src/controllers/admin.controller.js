@@ -37,9 +37,12 @@ export const updateOrder = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   try {
-    // Ensure the image path is relative
     const productData = {
       ...req.body,
+      sizes: req.body.sizes.map(size => ({
+        size: Number(size.size),
+        stock: Number(size.stock)
+      })),
       image: req.body.image.startsWith('http') 
         ? req.body.image 
         : `http://localhost:5000${req.body.image}`
@@ -55,18 +58,17 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const updateData = { ...req.body };
+    const updateData = { 
+      ...req.body,
+      sizes: req.body.sizes.map(size => ({
+        size: Number(size.size),
+        stock: Number(size.stock)
+      }))
+    };
     
     // Ensure image path starts with http
     if (updateData.image && !updateData.image.startsWith('http')) {
       updateData.image = `http://localhost:5000${updateData.image}`;
-    }
-
-    // Ensure sizes is an array of numbers
-    if (updateData.sizes) {
-      updateData.sizes = Array.isArray(updateData.sizes) 
-        ? updateData.sizes 
-        : updateData.sizes.split(',').map(size => Number(size.trim()));
     }
 
     const product = await Product.findByIdAndUpdate(
@@ -143,11 +145,16 @@ export const deleteOrder = async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    // Restore product stock quantities
+    // Restore product stock quantities by size
     for (const item of order.items) {
-      await Product.findByIdAndUpdate(item.product, {
-        $inc: { stock: item.quantity }
-      });
+      const product = await Product.findById(item.product);
+      if (product) {
+        const sizeData = product.sizes.find(s => s.size === item.size);
+        if (sizeData) {
+          sizeData.stock += item.quantity;
+          await product.save();
+        }
+      }
     }
 
     await Order.findByIdAndDelete(id);

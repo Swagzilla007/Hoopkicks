@@ -1,4 +1,4 @@
-import { Container, Typography, List, ListItem, ListItemText, Button, IconButton, Box, Snackbar } from '@mui/material';
+import { Container, Typography, List, ListItem, ListItemText, Button, IconButton, Box, Snackbar, Alert } from '@mui/material';
 import { Add, Remove, Delete } from '@mui/icons-material';
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
@@ -6,17 +6,39 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Cart() {
   const { items, updateQuantity, removeFromCart, getCartTotal } = useCart();
-  const [snackbar, setSnackbar] = useState({ open: false, message: '' });
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const navigate = useNavigate();
 
-  const handleQuantityChange = (id, size, newQuantity) => {
+  const handleQuantityChange = (id, size, newQuantity, maxStock) => {
+    if (newQuantity < 1) {
+      setSnackbar({ 
+        open: true, 
+        message: 'Quantity cannot be less than 1',
+        severity: 'error'
+      });
+      return;
+    }
+
+    if (maxStock && newQuantity > maxStock) {
+      setSnackbar({ 
+        open: true, 
+        message: `Only ${maxStock} items available in stock`,
+        severity: 'error'
+      });
+      return;
+    }
+
     updateQuantity(id, size, newQuantity);
-    setSnackbar({ open: true, message: 'Cart updated' });
+    setSnackbar({ 
+      open: true, 
+      message: 'Cart updated',
+      severity: 'success'
+    });
   };
 
   const handleRemove = (id, size) => {
     removeFromCart(id, size);
-    setSnackbar({ open: true, message: 'Item removed from cart' });
+    setSnackbar({ open: true, message: 'Item removed from cart', severity: 'success' });
   };
 
   return (
@@ -41,11 +63,25 @@ export default function Cart() {
                   secondary={`Rs. ${item.price.toLocaleString()}`}
                 />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
-                  <IconButton onClick={() => handleQuantityChange(item.id, item.size, item.quantity - 1)}>
+                  <IconButton 
+                    onClick={() => handleQuantityChange(
+                      item.id, 
+                      item.size, 
+                      item.quantity - 1,
+                      item.stock
+                    )}
+                  >
                     <Remove />
                   </IconButton>
                   <Typography>{item.quantity}</Typography>
-                  <IconButton onClick={() => handleQuantityChange(item.id, item.size, item.quantity + 1)}>
+                  <IconButton 
+                    onClick={() => handleQuantityChange(
+                      item.id, 
+                      item.size, 
+                      item.quantity + 1,
+                      item.stock
+                    )}
+                  >
                     <Add />
                   </IconButton>
                 </Box>
@@ -71,8 +107,11 @@ export default function Cart() {
         open={snackbar.open}
         autoHideDuration={3000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
-        message={snackbar.message}
-      />
+      >
+        <Alert severity={snackbar.severity || 'success'} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

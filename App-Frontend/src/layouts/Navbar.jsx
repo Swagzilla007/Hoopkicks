@@ -7,7 +7,8 @@ import { useAuth } from '../context/AuthContext';
 export default function Navbar() {
   const { items } = useCart();
   const { user, logout } = useAuth();
-  const cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
+  // Change to count unique items instead of total quantity
+  const cartItemCount = items.length;
 
   return (
     <AppBar position="static">

@@ -3,45 +3,37 @@ import Product from '../models/Product.js';
 
 export const createOrder = async (req, res) => {
   try {
-    console.log('Creating order with data:', req.body);
     const { items, shippingAddress, totalAmount } = req.body;
     
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({ message: 'Invalid order items' });
-    }
-
-    // Process each item and update stock
+    // Check stock for each item
     for (const item of items) {
       const product = await Product.findById(item.product);
       if (!product) {
-        return res.status(404).json({ 
-          message: `Product not found` 
-        });
+        return res.status(404).json({ message: `Product not found` });
       }
 
-      if (product.stock < item.quantity) {
+      const sizeData = product.sizes.find(s => s.size === item.size);
+      if (!sizeData || sizeData.stock < item.quantity) {
         return res.status(400).json({ 
-          message: `Not enough stock for ${product.name}` 
+          message: `Not enough stock for ${product.name} in size ${item.size}` 
         });
       }
-
-      // Update product stock
-      await Product.findByIdAndUpdate(item.product, {
-        $inc: { stock: -item.quantity }
-      });
     }
 
-    // Create new order - price is already in LKR from frontend
+    // Update stock for each item
+    for (const item of items) {
+      const product = await Product.findById(item.product);
+      const sizeData = product.sizes.find(s => s.size === item.size);
+      sizeData.stock -= item.quantity;
+      await product.save();
+    }
+
+    // Create order
     const order = new Order({
       user: req.user.id,
-      items: items.map(item => ({
-        product: item.product,
-        size: item.size,
-        quantity: item.quantity,
-        price: item.price // Price is already in LKR
-      })),
+      items,
       shippingAddress,
-      totalAmount, // Total amount is already in LKR
+      totalAmount,
       status: 'pending'
     });
 
@@ -51,8 +43,6 @@ export const createOrder = async (req, res) => {
     const populatedOrder = await Order.findById(order._id)
       .populate('user', 'name email')
       .populate('items.product', 'name price');
-
-    console.log('Created order:', populatedOrder);
 
     res.status(201).json({ 
       message: "Order placed successfully! We'll contact you soon.",

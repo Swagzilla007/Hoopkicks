@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, CardMedia, CardContent, Typography, Button, CardActions, Menu, MenuItem, Snackbar } from '@mui/material';
+import { Card, CardMedia, CardContent, Typography, Button, CardActions, Menu, MenuItem, Snackbar, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -9,9 +9,10 @@ export default function ProductCard({ product }) {
   const { addToCart } = useCart();
   const { user } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
   const handleClick = (event) => {
+    event.stopPropagation(); // Prevent event bubbling
     setAnchorEl(event.currentTarget);
   };
 
@@ -20,9 +21,27 @@ export default function ProductCard({ product }) {
   };
 
   const handleAddToCart = (size) => {
-    addToCart(product, size);
+    const sizeData = product.sizes.find(s => s.size === size);
+    if (!sizeData || sizeData.stock === 0) {
+      setSnackbar({
+        open: true,
+        message: 'Product is out of stock',
+        severity: 'error'
+      });
+      return;
+    }
+
+    const productWithId = {
+      ...product,
+      id: product._id // Ensure we're using MongoDB _id
+    };
+    addToCart(productWithId, size);
     handleClose();
-    setSnackbarOpen(true);
+    setSnackbar({
+      open: true,
+      message: `${product.name} added to cart successfully!`,
+      severity: 'success'
+    });
   };
 
   return (
@@ -54,9 +73,13 @@ export default function ProductCard({ product }) {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            {product.sizes.map((size) => (
-              <MenuItem key={size} onClick={() => handleAddToCart(size)}>
-                Size {size}
+            {Array.isArray(product.sizes) && product.sizes.map((sizeData) => (
+              <MenuItem 
+                key={sizeData.size} 
+                onClick={() => handleAddToCart(sizeData.size)}
+                disabled={sizeData.stock === 0}
+              >
+                Size {sizeData.size} - {sizeData.stock} available
               </MenuItem>
             ))}
           </Menu>
@@ -70,11 +93,14 @@ export default function ProductCard({ product }) {
         </CardActions>
       </Card>
       <Snackbar
-        open={snackbarOpen}
+        open={snackbar.open}
         autoHideDuration={2000}
-        onClose={() => setSnackbarOpen(false)}
-        message={`${product.name} added to cart successfully!`}
-      />
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert severity={snackbar.severity || 'success'} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

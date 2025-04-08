@@ -6,7 +6,7 @@ import {
   Select, MenuItem, FormControl, InputLabel, Grid,
   IconButton, Alert, Box
 } from '@mui/material';
-import { Delete, Edit, CloudUpload } from '@mui/icons-material';
+import { Delete, Edit, CloudUpload, Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import AdminLayout from '../../layouts/AdminLayout';
 import { adminAPI, productAPI } from '../../utils/api';
@@ -34,12 +34,12 @@ export default function ManageProducts() {
     price: '',
     brand: '',
     category: '',
-    sizes: [],
     image: '',
-    stock: ''
+    additionalImages: []
   });
   const [imagePreview, setImagePreview] = useState('');
   const [additionalImages, setAdditionalImages] = useState(['', '', '']);
+  const [sizeStockPairs, setSizeStockPairs] = useState([{ size: '', stock: '' }]);
 
   useEffect(() => {
     fetchProducts();
@@ -56,6 +56,7 @@ export default function ManageProducts() {
 
   const handleOpen = (product = null) => {
     if (product) {
+      console.log('Editing product:', product); // Debug log
       setSelectedProduct(product);
       setFormData({
         name: product.name,
@@ -63,11 +64,18 @@ export default function ManageProducts() {
         price: product.price.toString(),
         brand: product.brand,
         category: product.category,
-        sizes: Array.isArray(product.sizes) ? product.sizes.join(', ') : product.sizes,
         image: product.image,
-        stock: product.stock.toString(),
         additionalImages: product.additionalImages || []
       });
+      // Ensure sizes array is properly formatted
+      setSizeStockPairs(
+        Array.isArray(product.sizes) 
+          ? product.sizes.map(s => ({
+              size: s.size.toString(),
+              stock: s.stock.toString()
+            }))
+          : [{ size: '', stock: '' }]
+      );
       setImagePreview(product.image);
       setAdditionalImages(product.additionalImages || ['', '', '']);
     } else {
@@ -78,10 +86,9 @@ export default function ManageProducts() {
         price: '',
         brand: '',
         category: '',
-        sizes: [],
         image: '',
-        stock: ''
       });
+      setSizeStockPairs([{ size: '', stock: '' }]);
       setImagePreview('');
       setAdditionalImages(['', '', '']);
     }
@@ -137,19 +144,25 @@ export default function ManageProducts() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const validPairs = sizeStockPairs.filter(pair => pair.size && pair.stock);
+      if (validPairs.length === 0) {
+        setError('At least one size and stock combination is required');
+        return;
+      }
+
       const productData = {
-        name: formData.name,
-        description: formData.description,
+        ...formData,
+        sizes: sizeStockPairs
+          .filter(pair => pair.size && pair.stock)
+          .map(pair => ({
+            size: Number(pair.size),
+            stock: Number(pair.stock)
+          })),
         price: Number(formData.price),
-        brand: formData.brand,
-        category: formData.category,
-        sizes: typeof formData.sizes === 'string' 
-          ? formData.sizes.split(',').map(size => Number(size.trim()))
-          : formData.sizes,
-        image: formData.image,
-        stock: Number(formData.stock),
         additionalImages: additionalImages.filter(img => img !== '')
       };
+
+      console.log('Submitting product data:', productData); // Debug log
 
       if (selectedProduct) {
         await adminAPI.updateProduct(selectedProduct._id, productData);
@@ -159,6 +172,7 @@ export default function ManageProducts() {
       handleClose();
       fetchProducts();
     } catch (error) {
+      console.error('Error saving product:', error); // Debug log
       setError(error.response?.data?.message || 'Error saving product');
     }
   };
@@ -172,6 +186,20 @@ export default function ManageProducts() {
         setError('Error deleting product');
       }
     }
+  };
+
+  const addSizePair = () => {
+    setSizeStockPairs([...sizeStockPairs, { size: '', stock: '' }]);
+  };
+
+  const removeSizePair = (index) => {
+    setSizeStockPairs(sizeStockPairs.filter((_, i) => i !== index));
+  };
+
+  const updateSizePair = (index, field, value) => {
+    const newPairs = [...sizeStockPairs];
+    newPairs[index][field] = value;
+    setSizeStockPairs(newPairs);
   };
 
   return (
@@ -208,12 +236,25 @@ export default function ManageProducts() {
                   <TableCell>{product.brand}</TableCell>
                   <TableCell>{product.category}</TableCell>
                   <TableCell>Rs. {product.price.toLocaleString()}</TableCell>
-                  <TableCell>{product.stock}</TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleOpen(product)} color="primary">
+                    {Array.isArray(product.sizes) ? 
+                      product.sizes.map(s => 
+                        `Size ${s.size}: ${s.stock}`
+                      ).join(', ') : 
+                      'No sizes available'
+                    }
+                  </TableCell>
+                  <TableCell>
+                    <IconButton 
+                      onClick={() => handleOpen(product)} 
+                      color="primary"
+                    >
                       <Edit />
                     </IconButton>
-                    <IconButton onClick={() => handleDelete(product._id)} color="error">
+                    <IconButton 
+                      onClick={() => handleDelete(product._id)} 
+                      color="error"
+                    >
                       <Delete />
                     </IconButton>
                   </TableCell>
@@ -283,25 +324,40 @@ export default function ManageProducts() {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Sizes (comma-separated)"
-                    value={formData.sizes}
-                    onChange={(e) => setFormData({ ...formData, sizes: e.target.value })}
-                    helperText="Example: 7, 8, 9, 10"
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Stock"
-                    type="number"
-                    value={formData.stock}
-                    onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                    required
-                  />
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Sizes and Stock
+                  </Typography>
+                  {sizeStockPairs.map((pair, index) => (
+                    <Box key={index} sx={{ display: 'flex', gap: 1, mb: 2 }}>
+                      <TextField
+                        label="Size"
+                        type="number"
+                        value={pair.size}
+                        onChange={(e) => updateSizePair(index, 'size', e.target.value)}
+                        sx={{ width: '100px' }}
+                      />
+                      <TextField
+                        label="Stock"
+                        type="number"
+                        value={pair.stock}
+                        onChange={(e) => updateSizePair(index, 'stock', e.target.value)}
+                        sx={{ width: '100px' }}
+                      />
+                      <IconButton
+                        color="error"
+                        onClick={() => removeSizePair(index)}
+                        disabled={sizeStockPairs.length === 1}
+                      >
+                        <RemoveIcon />
+                      </IconButton>
+                      {index === sizeStockPairs.length - 1 && (
+                        <IconButton color="primary" onClick={addSizePair}>
+                          <AddIcon />
+                        </IconButton>
+                      )}
+                    </Box>
+                  ))}
                 </Grid>
                 <Grid item xs={12}>
                   <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>

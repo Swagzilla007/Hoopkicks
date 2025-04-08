@@ -31,8 +31,15 @@ const productSchema = new mongoose.Schema({
     enum: ['men', 'women']
   },
   sizes: [{
-    type: Number,
-    required: true
+    size: {
+      type: Number,
+      required: true
+    },
+    stock: {
+      type: Number,
+      required: true,
+      min: 0
+    }
   }],
   image: {
     type: String,
@@ -41,16 +48,26 @@ const productSchema = new mongoose.Schema({
   additionalImages: [{
     type: String
   }],
-  stock: {
-    type: Number,
-    required: true,
-    min: 0
-  },
   createdAt: {
     type: Date,
     default: Date.now
   }
 });
+
+// Add a method to check stock availability
+productSchema.methods.hasStock = function(size, quantity) {
+  const sizeData = this.sizes.find(s => s.size === size);
+  return sizeData && sizeData.stock >= quantity;
+};
+
+// Add a method to update stock
+productSchema.methods.updateStock = function(size, quantity) {
+  const sizeData = this.sizes.find(s => s.size === size);
+  if (sizeData) {
+    sizeData.stock -= quantity;
+  }
+  return this.save();
+};
 
 const Product = mongoose.model('Product', productSchema);
 export default Product;
