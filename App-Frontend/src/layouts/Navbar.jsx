@@ -24,7 +24,7 @@ export default function Navbar() {
   };
 
   const navButtonStyle = {
-    color: 'text.primary',
+    color: 'white',
     '&:hover': {
       color: '#f87b23'
     }
@@ -34,7 +34,7 @@ export default function Navbar() {
     <AppBar 
       position="sticky" 
       sx={{ 
-        backgroundColor: 'white', 
+        backgroundColor: '#075364', // Changed to green
         boxShadow: 1,
         top: 0,
         zIndex: (theme) => theme.zIndex.drawer + 1
@@ -59,7 +59,8 @@ export default function Navbar() {
             sx={{ 
               height: '70px',
               width: 'auto',
-              mr: 2
+              mr: 2,
+              filter: 'brightness(0) invert(1)' // This makes the logo white
             }}
           />
         </Box>
@@ -229,12 +230,17 @@ export default function Navbar() {
           
           {user ? (
             <>
-              <Typography variant="body1" sx={navButtonStyle}>
+              <Typography variant="body1" sx={{ color: 'white' }}>
                 {user.name}
               </Typography>
               <Button 
                 onClick={logout}
-                sx={navButtonStyle}
+                sx={{ 
+                  color: 'white',
+                  '&:hover': {
+                    color: '#f87b23'
+                  }
+                }}
               >
                 Logout
               </Button>
@@ -246,11 +252,11 @@ export default function Navbar() {
                 to="/login" 
                 variant="contained"
                 sx={{ 
-                  backgroundColor: '#075364',
+                  backgroundColor: '#f87b23',
                   color: 'white',
                   '&:hover': {
-                    backgroundColor: '#075364',
-                    color: '#f87b23',
+                    backgroundColor: '#e66a0f',
+                    color: 'white' // Keep text white on hover
                   }
                 }}
               >
@@ -261,11 +267,11 @@ export default function Navbar() {
                 to="/register" 
                 variant="contained"
                 sx={{ 
-                  backgroundColor: '#075364',
+                  backgroundColor: '#f87b23',
                   color: 'white',
                   '&:hover': {
-                    backgroundColor: '#075364',
-                    color: '#f87b23',
+                    backgroundColor: '#e66a0f',
+                    color: 'white' // Keep text white on hover
                   }
                 }}
               >

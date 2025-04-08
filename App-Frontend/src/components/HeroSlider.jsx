@@ -35,7 +35,7 @@ export default function HeroSlider() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 5000);
+    }, 7000); // Increased interval to 7 seconds
 
     return () => clearInterval(timer);
   }, []);
@@ -58,14 +58,14 @@ export default function HeroSlider() {
             width: '100%',
             height: '100%',
             opacity: index === currentIndex ? 1 : 0,
-            transition: 'all 1s ease-in-out',
-            transform: `translateX(${index === currentIndex ? '0' : index > currentIndex ? '100%' : '-100%'})`,
+            transition: 'opacity 2s ease-in-out',
             '& img': {
               width: '100%',
               height: '100%',
               objectFit: 'cover',
               objectPosition: 'center',
-              transform: 'scale(0.95)',
+              transform: index === currentIndex ? 'scale(1)' : 'scale(1.1)',
+              transition: 'transform 2.5s ease-in-out'
             }
           }}
         >
@@ -73,9 +73,6 @@ export default function HeroSlider() {
             src={slide.url} 
             alt={slide.title}
             loading={index === 0 ? 'eager' : 'lazy'}
-            style={{
-              transition: 'transform 0.5s ease-in-out'
-            }}
           />
         </Box>
       ))}

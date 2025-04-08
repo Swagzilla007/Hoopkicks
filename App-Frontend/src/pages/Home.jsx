@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Container, Typography, Grid, CircularProgress, Box } from '@mui/material';
+import { Container, Typography, Grid, CircularProgress, Box, Stack } from '@mui/material';
 import { useInView } from 'react-intersection-observer';
 import ProductCard from '../components/ProductCard';
 import HeroSlider from '../components/HeroSlider';
 import { productAPI } from '../utils/api';
 import welcomeImage from '../assets/images/store1.jpg'; // Import the store image
 import mainLogo from '../assets/Logo main.png'; // Add this import
+import { LocalShipping, Update, ThumbUp } from '@mui/icons-material';
+import upcomingTravisScott from '../assets/images/Upcoming-Travis-Scott-Shoes.webp';
+import cactusJack from '../assets/images/cactus jack.webp';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -39,7 +42,7 @@ export default function Home() {
       <Box 
         ref={welcomeRef}
         sx={{ 
-          backgroundColor: '#f8f8f8',
+          backgroundColor: '#075364', // Changed to green background
           py: 8,
           borderBottom: '1px solid #eaeaea',
           position: 'relative',
@@ -57,10 +60,10 @@ export default function Home() {
         <Container maxWidth="xl">
           <Box
             sx={{
-              border: '1px solid #e0e0e0',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: '12px',
-              boxShadow: '8px 8px 0px #075364, 16px 16px 0px rgba(7, 83, 100, 0.2)',
-              backgroundColor: 'white',
+              boxShadow: '8px 8px 0px #053d4a, 16px 16px 0px rgba(5, 61, 74, 0.2)',
+              backgroundColor: '#075364',
               overflow: 'hidden',
               transition: 'all 0.4s ease-in-out',
               display: 'flex',
@@ -69,7 +72,7 @@ export default function Home() {
               position: 'relative',
               '&:hover': {
                 transform: 'translate(-8px, -8px)',
-                boxShadow: '12px 12px 0px #075364, 24px 24px 0px rgba(7, 83, 100, 0.2)',
+                boxShadow: '12px 12px 0px #053d4a, 24px 24px 0px rgba(5, 61, 74, 0.2)',
               },
               '&::after': {
                 content: '""',
@@ -131,10 +134,10 @@ export default function Home() {
                 variant="h3" 
                 gutterBottom
                 sx={{ 
-                  fontWeight: 800,
-                  color: '#075364',
+                  fontWeight: 900, // Increased bold
+                  color: '#f87b23', // Changed to orange
                   mb: 3,
-                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)',
+                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
                   position: 'relative',
                   '&::after': {
                     content: '""',
@@ -153,19 +156,285 @@ export default function Home() {
               <Typography 
                 variant="h6" 
                 sx={{ 
-                  color: '#666',
+                  color: 'rgba(255, 255, 255, 0.9)', // Light text for contrast
                   lineHeight: 1.8,
                   letterSpacing: '0.5px',
-                  textAlign: 'justify'
+                  textAlign: 'justify',
+                  fontWeight: 500 // Slightly bolder for readability
                 }}
               >
                 Step into greatness with our premium collection of basketball footwear. 
                 From the court to the streets, find your perfect pair that combines 
                 style, comfort, and performance.
               </Typography>
+
+              {/* Service Highlights */}
+              <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                mt: 4,
+                gap: 2
+              }}>
+                <Box sx={{ 
+                  textAlign: 'center',
+                  transition: 'transform 0.2s',
+                  '&:hover': { transform: 'translateY(-5px)' }
+                }}>
+                  <LocalShipping sx={{ 
+                    fontSize: 40, 
+                    color: '#f87b23',
+                    mb: 1
+                  }} />
+                  <Typography sx={{ color: 'white', fontWeight: 'bold' }}>
+                    Fast Delivery
+                  </Typography>
+                  <Typography sx={{ color: '#e0e0e0', fontSize: '0.9rem' }}>
+                    Island-wide Shipping
+                  </Typography>
+                </Box>
+
+                <Box sx={{ 
+                  textAlign: 'center',
+                  transition: 'transform 0.2s',
+                  '&:hover': { transform: 'translateY(-5px)' }
+                }}>
+                  <Update sx={{ 
+                    fontSize: 40, 
+                    color: '#f87b23',
+                    mb: 1
+                  }} />
+                  <Typography sx={{ color: 'white', fontWeight: 'bold' }}>
+                    90 Days Return
+                  </Typography>
+                  <Typography sx={{ color: '#e0e0e0', fontSize: '0.9rem' }}>
+                    Easy Returns
+                  </Typography>
+                </Box>
+
+                <Box sx={{ 
+                  textAlign: 'center',
+                  transition: 'transform 0.2s',
+                  '&:hover': { transform: 'translateY(-5px)' }
+                }}>
+                  <ThumbUp sx={{ 
+                    fontSize: 40, 
+                    color: '#f87b23',
+                    mb: 1
+                  }} />
+                  <Typography sx={{ color: 'white', fontWeight: 'bold' }}>
+                    3K+ Reviews
+                  </Typography>
+                  <Typography sx={{ color: '#e0e0e0', fontSize: '0.9rem' }}>
+                    Happy Customers
+                  </Typography>
+                </Box>
+              </Box>
             </Box>
           </Box>
         </Container>
+      </Box>
+
+      {/* Future Releases and Offers Section */}
+      <Box sx={{ 
+        mt: 6, 
+        px: 0,
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: { xs: 4, md: 0 }
+      }}>
+        {/* Future Releases - Left Side */}
+        <Box sx={{ 
+          width: { xs: '100%', md: '35%' },
+          pl: { xs: 2, sm: 4, md: 6, lg: 8 },
+          pr: { xs: 2, sm: 4, md: 2 }
+        }}>
+          <Box
+            sx={{
+              backgroundColor: '#075364',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '8px 8px 0px #053d4a',
+              transition: 'transform 0.3s ease',
+              height: '100%',
+              '&:hover': {
+                transform: 'translate(-4px, -4px)',
+                boxShadow: '12px 12px 0px #053d4a',
+              }
+            }}
+          >
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                color: 'white',
+                fontWeight: 'bold',
+                p: 3,
+                position: 'relative',
+                fontSize: '1.5rem',
+                display: 'inline-block', // Added to match width with text
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  width: '100%', // Changed to match full text width
+                  height: '4px',
+                  backgroundColor: '#f87b23',
+                  borderRadius: '2px'
+                }
+              }}
+            >
+              Future Releases
+            </Typography>
+            
+            <Box sx={{ p: 3 }}>
+              <Box
+                component="img"
+                src={upcomingTravisScott}
+                alt="Travis Scott Collection"
+                sx={{
+                  width: '100%',
+                  height: '400px',
+                  objectFit: 'contain',
+                  borderRadius: '8px',
+                  mb: 3,
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)'
+                }}
+              />
+              
+              <Stack spacing={2}>
+                {[
+                  'Travis Scott x Nike Air Jordan 1 Low OG "Velvet Brown"',
+                  'Travis Scott x Nike Zoom Field Jaxx "Light Chocolate"',
+                  'Travis Scott x Nike Zoom Field Jaxx "Leche Blue"'
+                ].map((shoe, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      p: 2,
+                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                      borderRadius: '6px',
+                      transition: 'transform 0.2s ease',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        transform: 'translateX(8px)',
+                        backgroundColor: 'rgba(248, 123, 35, 0.1)'
+                      }
+                    }}
+                  >
+                    <Typography sx={{ color: 'white' }}>
+                      {shoe}
+                    </Typography>
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        color: '#f87b23',
+                        display: 'block',
+                        mt: 1
+                      }}
+                    >
+                      Coming Soon
+                    </Typography>
+                  </Box>
+                ))}
+              </Stack>
+            </Box>
+          </Box>
+        </Box>
+
+        {/* Offers - Right Side */}
+        <Box sx={{ 
+          width: { xs: '100%', md: '65%' },
+          pr: { xs: 2, sm: 4, md: 6, lg: 8 },
+          pl: { xs: 2, sm: 4, md: 2 }
+        }}>
+          <Box
+            sx={{
+              backgroundColor: '#075364',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '8px 8px 0px #053d4a',
+              transition: 'transform 0.3s ease',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              '&:hover': {
+                transform: 'translate(-4px, -4px)',
+                boxShadow: '12px 12px 0px #053d4a',
+              }
+            }}
+          >
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                color: 'white',
+                fontWeight: 'bold',
+                p: 2,
+                position: 'relative',
+                fontSize: '1.5rem',
+                width: 'fit-content', // Added to match text width
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '4px',
+                  backgroundColor: '#f87b23',
+                  borderRadius: '2px'
+                }
+              }}
+            >
+              Special Offers
+            </Typography>
+            
+            <Box sx={{ 
+              p: 2,
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column'
+            }}> 
+              <Box
+                component="img"
+                src={cactusJack}
+                alt="Cactus Jack Poster"
+                sx={{
+                  width: '100%',
+                  flex: 1,
+                  minHeight: '600px', // Increased height
+                  objectFit: 'contain',
+                  borderRadius: '8px',
+                  mb: 2,
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)'
+                }}
+              />
+              
+              <Box
+                sx={{ textAlign: 'center' }}
+              >
+                <Typography 
+                  variant="h6" 
+                  sx={{ 
+                    color: '#f87b23',
+                    fontWeight: 'bold',
+                    mb: 1,
+                    fontSize: '1.3rem'
+                  }}
+                >
+                  FREE CACTUS JACK POSTER
+                </Typography>
+                <Typography 
+                  variant="body1"
+                  sx={{ 
+                    color: 'white',
+                    fontSize: '1.1rem'
+                  }}
+                >
+                  With orders over Rs. 100,000
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
       </Box>
 
       {/* Products Section */}
