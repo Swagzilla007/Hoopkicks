@@ -140,7 +140,7 @@ export default function ProductCard({ product }) {
               {product.name}
             </Typography>
             <Typography sx={{ color: '#f87b23', fontWeight: 700, fontSize: '1.2rem' }}>
-              Rs. {product.price.toLocaleString()}
+              Rs. {product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </Typography>
 
             {/* Hidden Content Container */}
