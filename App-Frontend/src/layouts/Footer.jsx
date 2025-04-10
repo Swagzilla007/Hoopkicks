@@ -113,7 +113,7 @@ export default function Footer() {
           >
             <Box
               component="img"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png"
+              src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg"
               alt="Visa"
               sx={{ 
                 height: 25,
@@ -126,7 +126,7 @@ export default function Footer() {
             />
             <Box
               component="img"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png"
+              src="https://brand.mastercard.com/content/dam/mccom/global/logos/logo-mastercard-mobile.svg"
               alt="Mastercard"
               sx={{ 
                 height: 25,
@@ -139,8 +139,21 @@ export default function Footer() {
             />
             <Box
               component="img"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/1200px-American_Express_logo_%282018%29.svg.png"
+              src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg"
               alt="American Express"
+              sx={{ 
+                height: 25,
+                transition: 'transform 0.2s',
+                backgroundColor: 'white',
+                padding: '6px 10px',
+                borderRadius: '4px',
+                '&:hover': { transform: 'scale(1.1)' }
+              }}
+            />
+            <Box
+              component="img"
+              src="https://prod-site-cdn.paykoko.com/bnpl-site-cms-dev/kokoIframeImages/MAINLogo-HD_H_21.01.05.png"
+              alt="Koko"
               sx={{ 
                 height: 25,
                 transition: 'transform 0.2s',

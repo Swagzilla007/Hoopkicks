@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, CardMedia, CardContent, Typography, Button, CardActions, Menu, MenuItem, Snackbar, Alert, IconButton, Box } from '@mui/material';
-import { FavoriteBorder, Favorite, ShoppingCart, Visibility } from '@mui/icons-material';
+import { FavoriteBorder, Favorite, ShoppingCart, Visibility } from '@mui/icons-material'; // Removed LocalAtm icon
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -9,6 +9,13 @@ const getImageUrl = (path) => {
   if (!path) return '';
   if (path.startsWith('http')) return path;
   return `http://localhost:5000${path}`;
+};
+
+// Add payment logo URLs
+const paymentLogos = {
+  visa: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg',
+  mastercard: 'https://brand.mastercard.com/content/dam/mccom/global/logos/logo-mastercard-mobile.svg',
+  amex: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg'
 };
 
 export default function ProductCard({ product }) {
@@ -76,26 +83,19 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <Card sx={{ 
-      position: 'relative',
-      borderRadius: '12px',
-      overflow: 'hidden',
-      transition: 'all 0.2s ease-in-out',
-      '&:hover': {
-        transform: 'translateY(-8px) scale(1.02)',
-        boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-      }
-    }}>
-      {/* Static Image Section */}
-      <Box sx={{ position: 'relative', height: 200 }}>
+    <Card sx={{ width: '300px', height: '400px', position: 'relative', borderRadius: '12px', overflow: 'hidden' }}>
+      {/* Image Container */}
+      <Box sx={{ height: '200px', position: 'relative' }}>
         <CardMedia
           component="img"
-          height="200"
           image={getImageUrl(product.image)}
           alt={product.name}
-          sx={{ objectFit: 'contain' }}
+          sx={{ 
+            height: '100%',
+            width: '100%',
+            objectFit: 'contain'
+          }}
         />
-        {/* Heart Icon */}
         <IconButton
           onClick={handleWishlist}
           sx={{
@@ -115,62 +115,134 @@ export default function ProductCard({ product }) {
         </IconButton>
       </Box>
 
-      {/* Sliding Content Section */}
-      <Box 
-        sx={{ 
-          position: 'relative',
-          backgroundColor: 'white',
-          zIndex: 1,
-          transition: 'transform 0.3s ease',
-          '&:hover': {
-            transform: 'translateY(-60px)', // Slides up over image
-            '& .hidden-content': {
-              maxHeight: '200px',
-              opacity: 1,
-              visibility: 'visible'
+      {/* Content Container */}
+      <Box sx={{ position: 'relative', height: '200px', backgroundColor: 'white' }}>
+        {/* Sliding Content */}
+        <Box 
+          sx={{ 
+            position: 'absolute',
+            width: '100%',
+            backgroundColor: 'white',
+            transition: 'transform 0.3s ease',
+            '&:hover': {
+              transform: 'translateY(-60px)',
+              '& .hidden-content': {
+                maxHeight: '100px', // Increased to accommodate both logos and Koko offer
+                opacity: 1,
+                visibility: 'visible'
+              }
             }
-          }
-        }}
-      >
-        <CardContent sx={{ p: 2, pb: '8px !important' }}>
-          <Typography gutterBottom sx={{ fontWeight: 600, fontSize: '1.1rem', mb: 0.5 }}>
-            {product.name}
-          </Typography>
-          <Typography sx={{ color: '#f87b23', fontWeight: 700, fontSize: '1.2rem' }}>
-            Rs. {product.price.toLocaleString()}
-          </Typography>
-          
-          {/* Hidden Content */}
-          <Box 
-            className="hidden-content"
-            sx={{ 
-              maxHeight: 0,
-              opacity: 0,
-              visibility: 'hidden',
-              overflow: 'hidden',
-              transition: 'all 0.3s ease',
-              px: 2,
-              pb: 1
-            }}
-          >
-            <Typography variant="body2" sx={{ color: '#666', mt: 1 }}>
-              {product.description}
+          }}
+        >
+          {/* Regular Content */}
+          <CardContent sx={{ p: 2 }}>
+            <Typography gutterBottom sx={{ fontWeight: 600, fontSize: '1.1rem', mb: 0.5 }}>
+              {product.name}
             </Typography>
-            <Typography variant="caption" sx={{ color: '#075364', display: 'block', mt: 0.5 }}>
-              {product.category.charAt(0).toUpperCase() + product.category.slice(1)}'s Shoe
+            <Typography sx={{ color: '#f87b23', fontWeight: 700, fontSize: '1.2rem' }}>
+              Rs. {product.price.toLocaleString()}
             </Typography>
-          </Box>
-        </CardContent>
-      </Box>
 
-      {/* Static Button Section */}
-      <Box sx={{ mt: 'auto', borderTop: '1px solid rgba(0,0,0,0.05)', backgroundColor: 'white' }}>
-        <CardActions sx={{ p: 1, gap: 1 }}>
-          {user?.role !== 'admin' && (
+            {/* Hidden Content Container */}
+            <Box 
+              className="hidden-content"
+              sx={{ 
+                maxHeight: 0,
+                opacity: 0,
+                visibility: 'hidden',
+                overflow: 'hidden',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              {/* Payment Logos */}
+              <Box sx={{ 
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+                mt: 2,
+                mb: 1
+              }}>
+                {Object.entries(paymentLogos).map(([name, url]) => (
+                  <Box
+                    key={name}
+                    component="img"
+                    src={url}
+                    alt={`${name} logo`}
+                    sx={{
+                      height: name === 'visa' ? '24px' : '32px',
+                      width: 'auto',
+                      filter: 'none'
+                    }}
+                  />
+                ))}
+              </Box>
+
+              {/* Modified Koko Offer */}
+              <Box sx={{ 
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                mt: 1,
+                backgroundColor: 'rgba(248, 123, 35, 0.1)',
+                borderRadius: '4px',
+                p: 1
+              }}>
+                <Typography variant="caption" sx={{ color: '#075364', fontWeight: 'bold' }}>
+                  5% OFF for
+                </Typography>
+                <Box
+                  component="img"
+                  src="https://prod-site-cdn.paykoko.com/bnpl-site-cms-dev/kokoIframeImages/MAINLogo-HD_H_21.01.05.png"
+                  alt="Koko"
+                  sx={{
+                    height: '20px',
+                    width: 'auto'
+                  }}
+                />
+                <Typography variant="caption" sx={{ color: '#075364', fontWeight: 'bold' }}>
+                  payments
+                </Typography>
+              </Box>
+            </Box>
+
+          </CardContent>
+        </Box>
+
+        {/* Fixed Button Section */}
+        <Box sx={{ 
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          borderTop: '1px solid rgba(0,0,0,0.05)',
+          backgroundColor: 'white',
+          zIndex: 2
+        }}>
+          <CardActions sx={{ p: 1, gap: 1 }}>
+            {user?.role !== 'admin' && (
+              <Button 
+                size="small" 
+                onClick={handleClick}
+                startIcon={<ShoppingCart sx={{ fontSize: '1.2rem' }} />}
+                sx={{
+                  bgcolor: '#075364',
+                  color: 'white',
+                  flex: 1,
+                  fontSize: '0.875rem',
+                  minWidth: '120px',
+                  '&:hover': {
+                    bgcolor: '#075364',
+                    color: '#f87b23'
+                  }
+                }}
+              >
+                Cart
+              </Button>
+            )}
             <Button 
               size="small" 
-              onClick={handleClick}
-              startIcon={<ShoppingCart sx={{ fontSize: '1.2rem' }} />}
+              onClick={() => navigate(`/product/${product._id}`)}
+              startIcon={<Visibility sx={{ fontSize: '1.2rem' }} />}
               sx={{
                 bgcolor: '#075364',
                 color: 'white',
@@ -183,28 +255,10 @@ export default function ProductCard({ product }) {
                 }
               }}
             >
-              Cart
+              Details
             </Button>
-          )}
-          <Button 
-            size="small" 
-            onClick={() => navigate(`/product/${product._id}`)}
-            startIcon={<Visibility sx={{ fontSize: '1.2rem' }} />}
-            sx={{
-              bgcolor: '#075364',
-              color: 'white',
-              flex: 1,
-              fontSize: '0.875rem',
-              minWidth: '120px',
-              '&:hover': {
-                bgcolor: '#075364',
-                color: '#f87b23'
-              }
-            }}
-          >
-            Details
-          </Button>
-        </CardActions>
+          </CardActions>
+        </Box>
       </Box>
 
       <Menu
