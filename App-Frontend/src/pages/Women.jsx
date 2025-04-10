@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Container, Typography, Grid, Box, FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
 import ProductCard from '../components/ProductCard';
 import { productAPI } from '../utils/api';
+import WishlistButton from '../components/WishlistButton';
 
 export default function Women() {
   const [products, setProducts] = useState([]);
@@ -47,6 +48,7 @@ export default function Women() {
 
   return (
     <Container sx={{ mt: 4 }}>
+      <WishlistButton products={products} />
       <Typography variant="h4" gutterBottom>
         Women's Basketball Shoes
       </Typography>

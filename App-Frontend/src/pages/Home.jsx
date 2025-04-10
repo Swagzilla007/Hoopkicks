@@ -9,6 +9,7 @@ import mainLogo from '../assets/Logo main.png'; // Add this import
 import { LocalShipping, Update, ThumbUp } from '@mui/icons-material';
 import upcomingTravisScott from '../assets/images/Upcoming-Travis-Scott-Shoes.webp';
 import cactusJack from '../assets/images/cactus jack.webp';
+import WishlistButton from '../components/WishlistButton';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -37,7 +38,7 @@ export default function Home() {
   return (
     <Box>
       <HeroSlider />
-      
+      <WishlistButton products={products} />
       {/* Welcome Section */}
       <Box 
         ref={welcomeRef}
@@ -439,7 +440,25 @@ export default function Home() {
 
       {/* Products Section */}
       <Container sx={{ mt: 6 }}>
-        <Typography variant="h4" gutterBottom color="primary">
+        <Typography 
+          variant="h4" 
+          gutterBottom 
+          sx={{ 
+            color: '#075364',
+            position: 'relative',
+            pb: 1,
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: '60px',
+              height: '4px',
+              backgroundColor: '#f87b23',
+              borderRadius: '2px'
+            }
+          }}
+        >
           Featured Products
         </Typography>
         {loading ? (

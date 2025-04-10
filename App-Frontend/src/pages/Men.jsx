@@ -2,6 +2,7 @@ import { Container, Typography, Grid, Box, FormControl, InputLabel, Select, Menu
 import { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
 import { productAPI } from '../utils/api';
+import WishlistButton from '../components/WishlistButton';
 
 export default function Men() {
   const [products, setProducts] = useState([]);
@@ -39,6 +40,7 @@ export default function Men() {
 
   return (
     <Container sx={{ mt: 4 }}>
+      <WishlistButton products={products} />
       <Typography variant="h4" gutterBottom>
         Men's Basketball Shoes
       </Typography>

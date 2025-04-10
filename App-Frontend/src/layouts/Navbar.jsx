@@ -127,8 +127,10 @@ export default function Navbar() {
         {/* Filter Button */}
         <IconButton 
           sx={{ 
-            color: '#075364',
-            '&:hover': { color: '#f87b23' }
+            color: '#f87b23', // Changed to orange
+            '&:hover': { 
+              color: '#e66a0f' // Darker orange on hover 
+            }
           }}
           onClick={handleFilterClick}
         >
