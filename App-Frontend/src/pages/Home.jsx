@@ -10,6 +10,7 @@ import { LocalShipping, Update, ThumbUp } from '@mui/icons-material';
 import upcomingTravisScott from '../assets/images/Upcoming-Travis-Scott-Shoes.webp';
 import cactusJack from '../assets/images/cactus jack.webp';
 import WishlistButton from '../components/WishlistButton';
+import BrandLogos from '../components/BrandLogos';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -449,7 +450,7 @@ export default function Home() {
       </Box>
 
       {/* Products Section */}
-      <Container sx={{ mt: 6 }}>
+      <Container sx={{ mt: 6, mb: 6 }}> {/* Added mb: 6 for spacing */}
         <Typography 
           variant="h4" 
           gutterBottom 
@@ -493,6 +494,9 @@ export default function Home() {
           </Grid>
         )}
       </Container>
+
+      {/* Moved BrandLogos to bottom */}
+      <BrandLogos />
     </Box>
   );
 }
