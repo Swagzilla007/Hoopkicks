@@ -15,12 +15,16 @@ import {
   DialogContent
 } from '@mui/material';
 import { LocalShipping, Payment as PaymentIcon, CheckCircle, ShoppingBag } from '@mui/icons-material';
-// Fix import paths
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { orderAPI } from '../utils/api';
 
 const paymentMethods = {
+  cod: {
+    name: 'Cash on Delivery',
+    logo: 'https://cdn-icons-png.flaticon.com/512/2331/2331717.png',
+    description: 'Pay with cash upon delivery'
+  },
   visa: {
     name: 'Visa',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg'
@@ -36,25 +40,21 @@ const paymentMethods = {
   koko: {
     name: 'Koko Pay',
     logo: 'https://prod-site-cdn.paykoko.com/bnpl-site-cms-dev/kokoIframeImages/MAINLogo-HD_H_21.01.05.png'
-  },
-  cod: {
-    name: 'Cash on Delivery',
-    logo: 'https://cdn-icons-png.flaticon.com/512/2331/2331717.png',
-    description: 'Pay with cash upon delivery'
   }
 };
 
 export default function Payment() {
   const navigate = useNavigate();
+  const { clearCart } = useCart();
   const [selectedMethod, setSelectedMethod] = useState('');
   const [error, setError] = useState('');
-  const { clearCart } = useCart();
-  const { user } = useAuth();
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const { user } = useAuth();
 
   // Get order data from localStorage
   const orderData = JSON.parse(localStorage.getItem('orderData'));
 
+  // Redirect to cart if no order data
   if (!orderData) {
     navigate('/cart');
     return null;
@@ -67,20 +67,15 @@ export default function Payment() {
     }
 
     try {
-      // Add user and payment method to order data
       const finalOrderData = {
         ...orderData,
         user: user.id,
         paymentMethod: selectedMethod,
-        totalAmount: selectedMethod === 'koko' 
-          ? orderData.totalAmount * 0.95 
-          : orderData.totalAmount
+        totalAmount: selectedMethod === 'koko' ? 
+          orderData.totalAmount * 0.95 : orderData.totalAmount
       };
 
-      // Create order
       await orderAPI.createOrder(finalOrderData);
-      
-      // Show success dialog
       setShowSuccessDialog(true);
 
       // Clear cart and localStorage after 3 seconds
@@ -152,223 +147,171 @@ export default function Payment() {
           ))}
         </Box>
 
-        {/* Payment Methods */}
-        <Paper elevation={0} sx={{ 
-          p: 4,
-          borderRadius: '16px',
-          border: '1px solid rgba(7, 83, 100, 0.1)',
-          boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)',
-          transition: 'transform 0.3s ease',
-          '&:hover': {
-            transform: 'translate(-4px, -4px)',
-            boxShadow: '12px 12px 0px rgba(7, 83, 100, 0.1)',
-          }
-        }}>
-          <Typography variant="h5" sx={{ 
-            color: '#075364',
-            mb: 3,
-            fontWeight: 'bold',
-            position: 'relative',
-            pb: 2,
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              width: '40px',
-              height: '4px',
-              backgroundColor: '#f87b23',
-              borderRadius: '2px'
-            }
-          }}>
-            Select Payment Method
-          </Typography>
-
-          {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
-
-          <RadioGroup value={selectedMethod} onChange={(e) => setSelectedMethod(e.target.value)}>
-            {/* Cash on Delivery Option */}
-            <Paper elevation={0} sx={{
-              mb: 2,
-              border: `2px solid ${selectedMethod === 'cod' ? '#f87b23' : 'rgba(7, 83, 100, 0.1)'}`,
-              borderRadius: '12px',
-              transition: 'all 0.2s ease',
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
+          {/* Payment Methods */}
+          <Box sx={{ flex: '1 1 60%' }}>
+            <Paper elevation={0} sx={{ 
+              p: 4,
+              borderRadius: '16px',
+              border: '1px solid rgba(7, 83, 100, 0.1)',
+              boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)',
+              transition: 'transform 0.3s ease',
               '&:hover': {
-                borderColor: '#f87b23',
-                bgcolor: 'rgba(248, 123, 35, 0.02)'
+                transform: 'translate(-4px, -4px)',
+                boxShadow: '12px 12px 0px rgba(7, 83, 100, 0.1)',
               }
             }}>
-              <FormControlLabel
-                value="cod"
-                control={<Radio 
-                  sx={{
-                    '&.Mui-checked': {
-                      color: '#f87b23'
-                    }
-                  }}
-                />}
-                label={
-                  <Box sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center',
-                    gap: 2,
-                    py: 1
-                  }}>
-                    <Box
-                      component="img"
-                      src={paymentMethods.cod.logo}
-                      alt="Cash on Delivery"
-                      sx={{
-                        height: '32px',
-                        width: 'auto',
-                        filter: 'brightness(0.8)'
-                      }}
-                    />
-                    <Box>
-                      <Typography sx={{ color: '#075364', fontWeight: 500 }}>
-                        Cash on Delivery
-                      </Typography>
-                      <Typography variant="caption" sx={{ color: '#666' }}>
-                        Pay with cash upon delivery
-                      </Typography>
-                    </Box>
-                  </Box>
+              <Typography variant="h5" sx={{ 
+                color: '#075364',
+                mb: 3,
+                fontWeight: 'bold',
+                position: 'relative',
+                pb: 2,
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  width: '40px',
+                  height: '4px',
+                  backgroundColor: '#f87b23',
+                  borderRadius: '2px'
                 }
-                sx={{
-                  mx: 1,
-                  width: '100%',
-                  '& .MuiFormControlLabel-label': {
-                    width: '100%'
-                  }
-                }}
-              />
-            </Paper>
+              }}>
+                Select Payment Method
+              </Typography>
 
-            {Object.entries(paymentMethods).map(([key, method]) => (
-              key !== 'cod' && (
-                <Paper key={key} elevation={0} sx={{
-                  mb: 2,
-                  border: `2px solid ${selectedMethod === key ? '#f87b23' : 'rgba(7, 83, 100, 0.1)'}`,
-                  borderRadius: '12px',
-                  transition: 'all 0.2s ease',
-                  '&:hover': {
-                    borderColor: '#f87b23',
-                    bgcolor: 'rgba(248, 123, 35, 0.02)'
-                  }
-                }}>
-                  <FormControlLabel
-                    value={key}
-                    control={<Radio 
+              {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
+
+              <RadioGroup value={selectedMethod} onChange={(e) => setSelectedMethod(e.target.value)}>
+                {Object.entries(paymentMethods).map(([key, method]) => (
+                  <Paper key={key} elevation={0} sx={{
+                    mb: 2,
+                    border: `2px solid ${selectedMethod === key ? '#f87b23' : 'rgba(7, 83, 100, 0.1)'}`,
+                    borderRadius: '12px',
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      borderColor: '#f87b23',
+                      bgcolor: 'rgba(248, 123, 35, 0.02)'
+                    }
+                  }}>
+                    <FormControlLabel
+                      value={key}
+                      control={<Radio 
+                        sx={{
+                          '&.Mui-checked': {
+                            color: '#f87b23'
+                          }
+                        }}
+                      />}
+                      label={
+                        <Box sx={{ 
+                          display: 'flex', 
+                          alignItems: 'center',
+                          gap: 2,
+                          py: 1
+                        }}>
+                          <Box
+                            component="img"
+                            src={method.logo}
+                            alt={method.name}
+                            sx={{
+                              height: key === 'visa' ? '20px' : '32px',
+                              width: 'auto'
+                            }}
+                          />
+                          {key === 'koko' && (
+                            <Typography variant="caption" sx={{ 
+                              color: '#f87b23',
+                              bgcolor: 'rgba(248, 123, 35, 0.1)',
+                              px: 1,
+                              py: 0.5,
+                              borderRadius: '4px',
+                              fontWeight: 500
+                            }}>
+                              5% OFF
+                            </Typography>
+                          )}
+                        </Box>
+                      }
                       sx={{
-                        '&.Mui-checked': {
-                          color: '#f87b23'
+                        mx: 1,
+                        '& .MuiFormControlLabel-label': {
+                          width: '100%'
                         }
                       }}
-                    />}
-                    label={
-                      <Box sx={{ 
-                        display: 'flex', 
-                        alignItems: 'center',
-                        gap: 2,
-                        py: 1
-                      }}>
-                        <Box
-                          component="img"
-                          src={method.logo}
-                          alt={method.name}
-                          sx={{
-                            height: key === 'visa' ? '20px' : '32px',
-                            width: 'auto'
-                          }}
-                        />
-                        {key === 'koko' && (
-                          <Typography variant="caption" sx={{ 
-                            color: '#f87b23',
-                            bgcolor: 'rgba(248, 123, 35, 0.1)',
-                            px: 1,
-                            py: 0.5,
-                            borderRadius: '4px',
-                            fontWeight: 500
-                          }}>
-                            5% OFF
-                          </Typography>
-                        )}
-                      </Box>
-                    }
-                    sx={{
-                      mx: 1,
-                      '& .MuiFormControlLabel-label': {
-                        width: '100%'
-                      }
-                    }}
-                  />
-                </Paper>
-              )
-            ))}
-          </RadioGroup>
-        </Paper>
+                    />
+                  </Paper>
+                ))}
+              </RadioGroup>
+            </Paper>
+          </Box>
 
-        {/* Order Summary */}
-        <Paper elevation={0} sx={{ 
-          p: 4,
-          borderRadius: '16px',
-          border: '1px solid rgba(7, 83, 100, 0.1)',
-          boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)'
-        }}>
-          <Typography variant="h6" sx={{ color: '#075364', mb: 3 }}>
-            Order Summary
-          </Typography>
-          
-          <Box sx={{ mb: 3 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography sx={{ color: '#666' }}>Subtotal</Typography>
-              <Typography sx={{ color: '#075364' }}>
-                Rs. {orderData.totalAmount.toLocaleString()}
+          {/* Order Summary */}
+          <Box sx={{ flex: '1 1 40%' }}>
+            <Paper elevation={0} sx={{ 
+              p: 4,
+              borderRadius: '16px',
+              border: '1px solid rgba(7, 83, 100, 0.1)',
+              boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)'
+            }}>
+              <Typography variant="h5" gutterBottom sx={{ color: '#075364', mb: 3 }}>
+                Order Summary
               </Typography>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography sx={{ color: '#666' }}>Shipping</Typography>
-              <Typography sx={{ color: '#075364' }}>Free</Typography>
-            </Box>
-            {selectedMethod === 'koko' && (
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography sx={{ color: '#f87b23' }}>Koko Discount (5%)</Typography>
-                <Typography sx={{ color: '#f87b23' }}>
-                  - Rs. {(orderData.totalAmount * 0.05).toLocaleString()}
+              
+              <Box sx={{ mb: 3 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                  <Typography sx={{ color: '#666' }}>Subtotal</Typography>
+                  <Typography sx={{ color: '#075364' }}>
+                    Rs. {orderData.totalAmount.toLocaleString()}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                  <Typography sx={{ color: '#666' }}>Shipping</Typography>
+                  <Typography sx={{ color: '#075364' }}>Free</Typography>
+                </Box>
+                {selectedMethod === 'koko' && (
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                    <Typography sx={{ color: '#f87b23' }}>Koko Discount (5%)</Typography>
+                    <Typography sx={{ color: '#f87b23' }}>
+                      - Rs. {(orderData.totalAmount * 0.05).toLocaleString()}
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
+
+              <Divider sx={{ mb: 3 }} />
+
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+                <Typography variant="h6" sx={{ color: '#075364' }}>Total</Typography>
+                <Typography variant="h6" sx={{ color: '#f87b23' }}>
+                  Rs. {(selectedMethod === 'koko' 
+                    ? orderData.totalAmount * 0.95 
+                    : orderData.totalAmount).toLocaleString()}
                 </Typography>
               </Box>
-            )}
-          </Box>
 
-          <Divider sx={{ mb: 3 }} />
-          
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-            <Typography variant="h6" sx={{ color: '#075364' }}>Total</Typography>
-            <Typography variant="h6" sx={{ color: '#f87b23' }}>
-              Rs. {(selectedMethod === 'koko' 
-                ? orderData.totalAmount * 0.95 
-                : orderData.totalAmount).toLocaleString()}
-            </Typography>
+              <Button
+                variant="contained"
+                fullWidth
+                size="large"
+                onClick={handlePaymentSubmit}
+                disabled={!selectedMethod}
+                sx={{
+                  bgcolor: '#075364',
+                  color: 'white',
+                  py: 1.5,
+                  '&:hover': {
+                    bgcolor: '#075364',
+                    color: '#f87b23'
+                  }
+                }}
+              >
+                Complete Order
+              </Button>
+            </Paper>
           </Box>
-
-          <Button
-            variant="contained"
-            fullWidth
-            size="large"
-            onClick={handlePaymentSubmit}
-            sx={{
-              bgcolor: '#075364',
-              color: 'white',
-              py: 1.5,
-              '&:hover': {
-                bgcolor: '#075364',
-                color: '#f87b23'
-              }
-            }}
-          >
-            Complete Payment
-          </Button>
-        </Paper>
+        </Box>
       </Box>
 
       {/* Success Dialog */}
