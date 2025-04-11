@@ -326,8 +326,21 @@ export default function ProductDetails() {
                         key={sizeData.size} 
                         value={sizeData.size}
                         disabled={sizeData.stock === 0}
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between'
+                        }}
                       >
-                        US {sizeData.size} ({sizeData.stock} pairs)
+                        <span>US {sizeData.size}</span>
+                        <Typography 
+                          variant="caption" 
+                          sx={{ 
+                            color: sizeData.stock === 0 ? '#ff3d00' : '#666',
+                            ml: 2
+                          }}
+                        >
+                          ({sizeData.stock} pairs)
+                        </Typography>
                       </MenuItem>
                     ))}
                   </Select>
