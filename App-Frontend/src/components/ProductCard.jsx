@@ -18,6 +18,13 @@ const paymentLogos = {
   amex: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg'
 };
 
+const brandLogos = {
+  nike: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/80px-Logo_NIKE.svg.png', // Even smaller Nike logo
+  adidas: 'https://1000logos.net/wp-content/uploads/2016/10/Adidas-Logo.png',
+  jordan: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Jumpman_logo.svg/640px-Jumpman_logo.svg.png',
+  'new balance': 'https://cdn.freebiesupply.com/logos/large/2x/new-balance-2-logo-png-transparent.png' // New cleaner logo URL
+};
+
 export default function ProductCard({ product }) {
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -104,7 +111,9 @@ export default function ProductCard({ product }) {
             right: 8,
             bgcolor: 'rgba(255, 255, 255, 0.8)',
             zIndex: 3,
-            '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.9)' }
+            '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.9)' },
+            '&:focus': { outline: 'none' }, // Remove focus outline
+            '&:active': { outline: 'none' }  // Remove active outline
           }}
         >
           {isWishlisted ? (
@@ -125,9 +134,9 @@ export default function ProductCard({ product }) {
             backgroundColor: 'white',
             transition: 'transform 0.3s ease',
             '&:hover': {
-              transform: 'translateY(-60px)',
+              transform: 'translateY(-80px)', 
               '& .hidden-content': {
-                maxHeight: '100px', // Increased to accommodate both logos and Koko offer
+                maxHeight: '100px', 
                 opacity: 1,
                 visibility: 'visible'
               }
@@ -142,6 +151,80 @@ export default function ProductCard({ product }) {
             <Typography sx={{ color: '#f87b23', fontWeight: 700, fontSize: '1.2rem' }}>
               Rs. {product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </Typography>
+
+            {/* Add these elements between price and hidden content */}
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 1,
+              mt: 1,
+              mb: 1.5,
+              fontSize: '0.875rem',
+              color: '#666'
+            }}>
+              {/* Brand Logo or Text */}
+              <Box sx={{ 
+                display: 'inline-flex', 
+                alignItems: 'center',
+                bgcolor: 'rgba(7, 83, 100, 0.05)',
+                px: 1,
+                py: 0.5,
+                borderRadius: '4px',
+                fontSize: '0.75rem'
+              }}>
+                {brandLogos[product.brand.toLowerCase()] ? (
+                  <Box
+                    component="img"
+                    src={brandLogos[product.brand.toLowerCase()]}
+                    alt={product.brand}
+                    sx={{
+                      height: product.brand.toLowerCase() === 'nike' ? '12px' : 
+                             product.brand.toLowerCase() === 'adidas' ? '14px' :
+                             product.brand.toLowerCase() === 'jordan' ? '18px' :
+                             product.brand.toLowerCase() === 'new balance' ? '22px' : '14px', // Increased from 18px to 22px
+                      width: 'auto',
+                      filter: 'brightness(0.3)',
+                      objectFit: 'contain'
+                    }}
+                  />
+                ) : (
+                  product.brand
+                )}
+              </Box>
+
+              {/* Rest of the existing tags */}
+              <Box sx={{ 
+                display: 'inline-flex', 
+                alignItems: 'center',
+                bgcolor: 'rgba(248, 123, 35, 0.05)',
+                px: 1,
+                py: 0.5,
+                borderRadius: '4px',
+                fontSize: '0.75rem',
+                color: '#f87b23'
+              }}>
+                {product.category === 'men' ? "Men's" : "Women's"}
+              </Box>
+              {product.sizes.some(s => s.stock > 0) ? (
+                <Box sx={{ 
+                  marginLeft: 'auto',
+                  color: '#4caf50',
+                  fontSize: '0.75rem',
+                  fontWeight: 500
+                }}>
+                  In Stock
+                </Box>
+              ) : (
+                <Box sx={{ 
+                  marginLeft: 'auto',
+                  color: '#ff3d00',
+                  fontSize: '0.75rem',
+                  fontWeight: 500
+                }}>
+                  Out of Stock
+                </Box>
+              )}
+            </Box>
 
             {/* Hidden Content Container */}
             <Box 
@@ -169,7 +252,7 @@ export default function ProductCard({ product }) {
                     src={url}
                     alt={`${name} logo`}
                     sx={{
-                      height: name === 'visa' ? '24px' : '32px',
+                      height: name === 'visa' ? '20px' : '28px', // Reduced from 24px/32px
                       width: 'auto',
                       filter: 'none'
                     }}

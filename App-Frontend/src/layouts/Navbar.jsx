@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Typography, Button, IconButton, Badge, Box, InputBase, alpha, Menu, MenuItem, Checkbox, FormControlLabel, Slider } from '@mui/material';
-import { ShoppingCart, Search as SearchIcon, FilterList } from '@mui/icons-material';
+import { ShoppingCart, Search as SearchIcon, FilterList, Menu as MenuIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -14,6 +14,7 @@ export default function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchHover, setSearchHover] = useState(false);
   const [searchFocus, setSearchFocus] = useState(false);
+  const [mobileMenuAnchor, setMobileMenuAnchor] = useState(null);
 
   const handleFilterClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -21,6 +22,14 @@ export default function Navbar() {
 
   const handleFilterClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleMobileMenuOpen = (event) => {
+    setMobileMenuAnchor(event.currentTarget);
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMenuAnchor(null);
   };
 
   const navButtonStyle = {
@@ -40,7 +49,7 @@ export default function Navbar() {
         zIndex: (theme) => theme.zIndex.drawer + 1
       }}
     >
-      <Toolbar sx={{ minHeight: '80px', gap: 2 }}>
+      <Toolbar sx={{ minHeight: '80px', gap: 2, justifyContent: 'space-between' }}>
         {/* Logo */}
         <Box 
           component={Link} 
@@ -49,7 +58,7 @@ export default function Navbar() {
             display: 'flex', 
             alignItems: 'center', 
             textDecoration: 'none',
-            ml: -2
+            flex: '0 0 auto'  // Prevent logo from growing
           }}
         >
           <Box
@@ -65,25 +74,25 @@ export default function Navbar() {
           />
         </Box>
 
-        {/* Search Bar */}
+        {/* Search Bar - Center Positioned */}
         <Box
           sx={{
-            position: 'relative',
+            display: { xs: 'none', lg: 'flex' }, // Changed from md to lg
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '300px',
             borderRadius: '8px',
             border: '1px solid #e0e0e0',
             backgroundColor: 'white',
             boxShadow: '4px 4px 0px #075364',
             transition: 'all 0.2s ease',
-            mr: 2,
-            ml: 'auto',
-            width: '300px', // Changed from auto/400px to fixed 300px
-            flex: '0 0 auto', // Changed from flex: 1 to prevent expanding
             '&:hover': {
-              transform: 'translate(-2px, -2px)',
+              transform: 'translateX(-50%) translate(-2px, -2px)',
               boxShadow: '6px 6px 0px #075364',
             },
             ...(searchFocus && {
-              transform: 'translate(-2px, -2px)',
+              transform: 'translateX(-50%) translate(-2px, -2px)',
               boxShadow: '6px 6px 0px #075364',
             })
           }}
@@ -212,8 +221,13 @@ export default function Navbar() {
           </Button>
         </Menu>
 
-        {/* Navigation Items */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        {/* Right Side Navigation */}
+        <Box sx={{ 
+          display: { xs: 'none', lg: 'flex' }, // Changed from md to lg
+          alignItems: 'center', 
+          gap: 2,
+          flex: '0 0 auto'  // Prevent right side from growing
+        }}>
           <Button component={Link} to="/men" sx={navButtonStyle}>Men</Button>
           <Button component={Link} to="/women" sx={navButtonStyle}>Women</Button>
           <Button component={Link} to="/about" sx={navButtonStyle}>About Us</Button>
@@ -282,6 +296,131 @@ export default function Navbar() {
             </>
           )}
         </Box>
+
+        {/* Mobile Menu Button */}
+        <IconButton
+          sx={{ 
+            display: { xs: 'flex', lg: 'none' }, // Changed from md to lg
+            ml: 'auto',
+            color: 'white'
+          }}
+          onClick={handleMobileMenuOpen}
+        >
+          <MenuIcon />
+        </IconButton>
+
+        {/* Mobile Menu */}
+        <Menu
+          anchorEl={mobileMenuAnchor}
+          open={Boolean(mobileMenuAnchor)}
+          onClose={handleMobileMenuClose}
+          PaperProps={{
+            sx: {
+              mt: 1.5,
+              width: '100%',
+              maxWidth: '300px'
+            }
+          }}
+        >
+          {/* Search Bar in Mobile Menu */}
+          <MenuItem sx={{ p: 2 }}>
+            <Box sx={{ width: '100%' }}>
+              <InputBase
+                placeholder="Search products…"
+                fullWidth
+                sx={{
+                  border: '1px solid #e0e0e0',
+                  borderRadius: 1,
+                  p: 1
+                }}
+              />
+            </Box>
+          </MenuItem>
+
+          {/* Navigation Links */}
+          <MenuItem 
+            component={Link} 
+            to="/men"
+            onClick={handleMobileMenuClose}
+            sx={{ color: '#075364' }}
+          >
+            Men
+          </MenuItem>
+          <MenuItem 
+            component={Link} 
+            to="/women"
+            onClick={handleMobileMenuClose}
+            sx={{ color: '#075364' }}
+          >
+            Women
+          </MenuItem>
+          <MenuItem 
+            component={Link} 
+            to="/about"
+            onClick={handleMobileMenuClose}
+            sx={{ color: '#075364' }}
+          >
+            About Us
+          </MenuItem>
+
+          {/* Cart or Admin Dashboard */}
+          {user?.role === 'admin' ? (
+            <MenuItem 
+              component={Link} 
+              to="/admin"
+              onClick={handleMobileMenuClose}
+              sx={{ color: '#075364' }}
+            >
+              Admin Dashboard
+            </MenuItem>
+          ) : (
+            <MenuItem 
+              component={Link} 
+              to="/cart"
+              onClick={handleMobileMenuClose}
+              sx={{ color: '#075364' }}
+            >
+              Cart ({cartItemCount})
+            </MenuItem>
+          )}
+
+          {/* Auth Buttons */}
+          {user ? (
+            <>
+              <MenuItem sx={{ color: '#075364' }}>
+                {user.name}
+              </MenuItem>
+              <MenuItem 
+                onClick={() => {
+                  logout();
+                  handleMobileMenuClose();
+                }}
+                sx={{ color: '#f87b23' }}
+              >
+                Logout
+              </MenuItem>
+            </>
+          ) : (
+            <>
+              <MenuItem 
+                component={Link} 
+                to="/login"
+                onClick={handleMobileMenuClose}
+                sx={{ color: '#f87b23' }}
+              >
+                Login
+              </MenuItem>
+              <MenuItem 
+                component={Link} 
+                to="/register"
+                onClick={handleMobileMenuClose}
+                sx={{ color: '#f87b23' }}
+              >
+                Register
+              </MenuItem>
+            </>
+          )}
+        </Menu>
       </Toolbar>
     </AppBar>
   );

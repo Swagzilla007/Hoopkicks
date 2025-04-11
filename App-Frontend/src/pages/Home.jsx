@@ -68,8 +68,9 @@ export default function Home() {
               overflow: 'hidden',
               transition: 'all 0.4s ease-in-out',
               display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' }, // Stack on mobile
               alignItems: 'center',
-              minHeight: '400px',
+              minHeight: { xs: 'auto', md: '400px' },
               position: 'relative',
               '&:hover': {
                 transform: 'translate(-8px, -8px)',
@@ -88,8 +89,9 @@ export default function Home() {
           >
             <Box
               sx={{
-                flex: '0 0 50%',
-                p: 6,
+                flex: { xs: '1', md: '0 0 50%' },
+                p: { xs: 4, md: 6 },
+                width: { xs: '100%', md: 'auto' },
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -101,9 +103,10 @@ export default function Home() {
                   content: '""',
                   position: 'absolute',
                   right: 0,
-                  top: '10%',
-                  bottom: '10%',
-                  width: '1px',
+                  top: { xs: 'auto', md: '10%' },
+                  bottom: { xs: 0, md: '10%' },
+                  width: { xs: '100%', md: '1px' },
+                  height: { xs: '1px', md: '80%' },
                   background: 'linear-gradient(180deg, transparent, #075364, transparent)'
                 }
               }}
@@ -114,7 +117,7 @@ export default function Home() {
                 alt="HoopKicks Logo"
                 sx={{
                   width: '100%',
-                  maxWidth: '500px',
+                  maxWidth: { xs: '300px', md: '500px' },
                   height: 'auto',
                   objectFit: 'contain',
                   filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1))'
@@ -124,8 +127,8 @@ export default function Home() {
 
             <Box
               sx={{
-                flex: '0 0 50%',
-                p: 8,
+                flex: { xs: '1', md: '0 0 50%' },
+                p: { xs: 4, md: 8 },
                 transform: inView ? 'translateX(0)' : 'translateX(100%)',
                 opacity: inView ? 1 : 0,
                 transition: 'all 0.8s ease-out',
@@ -135,16 +138,19 @@ export default function Home() {
                 variant="h3" 
                 gutterBottom
                 sx={{ 
-                  fontWeight: 900, // Increased bold
-                  color: '#f87b23', // Changed to orange
+                  fontWeight: 900,
+                  color: '#f87b23',
                   mb: 3,
+                  fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+                  textAlign: { xs: 'center', md: 'left' },
                   textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
                   position: 'relative',
                   '&::after': {
                     content: '""',
                     position: 'absolute',
                     bottom: '-10px',
-                    left: 0,
+                    left: { xs: '50%', md: 0 },
+                    transform: { xs: 'translateX(-50%)', md: 'none' },
                     width: '60px',
                     height: '4px',
                     backgroundColor: '#f87b23',
@@ -154,27 +160,31 @@ export default function Home() {
               >
                 Welcome to HoopKicks
               </Typography>
+
               <Typography 
                 variant="h6" 
                 sx={{ 
-                  color: 'rgba(255, 255, 255, 0.9)', // Light text for contrast
+                  color: 'rgba(255, 255, 255, 0.9)',
                   lineHeight: 1.8,
                   letterSpacing: '0.5px',
-                  textAlign: 'justify',
-                  fontWeight: 500 // Slightly bolder for readability
+                  textAlign: { xs: 'center', md: 'justify' },
+                  fontSize: { xs: '1rem', md: '1.25rem' },
+                  fontWeight: 500
                 }}
               >
-                Step into greatness with our premium collection of basketball footwear. 
-                From the court to the streets, find your perfect pair that combines 
+                Step into greatness with our premium collection of footwear. 
+                From the streets to your feet, find your perfect pair that combines 
                 style, comfort, and performance.
               </Typography>
 
               {/* Service Highlights */}
               <Box sx={{ 
                 display: 'flex', 
+                flexDirection: { xs: 'column', sm: 'row' },
                 justifyContent: 'space-between', 
+                alignItems: 'center',
                 mt: 4,
-                gap: 2
+                gap: { xs: 3, sm: 2 }
               }}>
                 <Box sx={{ 
                   textAlign: 'center',
@@ -466,9 +476,17 @@ export default function Home() {
             <CircularProgress />
           </Box>
         ) : (
-          <Grid container spacing={3}>
+          <Grid container spacing={2}>
             {products.map(product => (
-              <Grid item xs={12} sm={6} md={4} key={product._id}>
+              <Grid key={product._id} 
+                    item 
+                    xs={12} 
+                    sm={6} 
+                    lg={3}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center'
+                    }}>
                 <ProductCard product={product} />
               </Grid>
             ))}

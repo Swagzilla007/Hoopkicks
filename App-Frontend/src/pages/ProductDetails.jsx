@@ -22,6 +22,19 @@ import { useCart } from '../context/CartContext';
 import { productAPI } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 
+const brandLogos = {
+  nike: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/80px-Logo_NIKE.svg.png',
+  adidas: 'https://1000logos.net/wp-content/uploads/2016/10/Adidas-Logo.png',
+  jordan: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Jumpman_logo.svg/640px-Jumpman_logo.svg.png',
+  'new balance': 'https://cdn.freebiesupply.com/logos/large/2x/new-balance-2-logo-png-transparent.png'
+};
+
+const paymentLogos = {
+  visa: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg',
+  mastercard: 'https://brand.mastercard.com/content/dam/mccom/global/logos/logo-mastercard-mobile.svg',
+  amex: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg'
+};
+
 export default function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -82,9 +95,23 @@ export default function ProductDetails() {
 
   return (
     <Container maxWidth="xl" sx={{ mt: 4 }}>
-      <Grid container spacing={4}>
-        {/* Left Side - Large Image Container */}
-        <Grid item xs={12} md={8}>
+      <Grid 
+        container 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'nowrap',
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: 4
+        }}
+      >
+        {/* Left Side - Image Container */}
+        <Grid 
+          item 
+          sx={{
+            width: { xs: '100%', md: '65%' },
+            flexShrink: 0
+          }}
+        >
           <Card elevation={0} sx={{ 
             backgroundColor: 'transparent',
             border: '1px solid rgba(7, 83, 100, 0.1)',
@@ -156,16 +183,23 @@ export default function ProductDetails() {
           </Card>
         </Grid>
 
-        {/* Right Side - Product Info & Size Selection */}
-        <Grid item xs={12} md={4}>
+        {/* Right Side - Details Container */}
+        <Grid 
+          item 
+          sx={{
+            width: { xs: '100%', md: '35%' },
+            flexShrink: 0,
+            height: 'fit-content',
+            position: 'sticky',
+            top: '2rem'
+          }}
+        >
           <Box sx={{ 
-            p: 3, 
+            p: 3,
             border: '1px solid rgba(7, 83, 100, 0.1)',
             borderRadius: '12px',
             backgroundColor: 'white',
-            boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)',
-            position: 'sticky',
-            top: 100 // Adjust based on your navbar height
+            boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)'
           }}>
             <Typography variant="h5" gutterBottom sx={{ color: '#075364' }}>
               {product.name}
@@ -178,8 +212,55 @@ export default function ProductDetails() {
             </Typography>
 
             <Typography variant="subtitle2" sx={{ color: '#075364', fontWeight: 600, mb: 1 }}>
-              Brand: {product.brand}
+              Brand: {' '}
+              {brandLogos[product.brand.toLowerCase()] ? (
+                <Box
+                  component="img"
+                  src={brandLogos[product.brand.toLowerCase()]}
+                  alt={product.brand}
+                  sx={{
+                    height: product.brand.toLowerCase() === 'nike' ? '12px' : 
+                           product.brand.toLowerCase() === 'adidas' ? '14px' :
+                           product.brand.toLowerCase() === 'jordan' ? '18px' :
+                           product.brand.toLowerCase() === 'new balance' ? '22px' : '14px',
+                    width: 'auto',
+                    filter: 'brightness(0.3)',
+                    objectFit: 'contain',
+                    verticalAlign: 'middle',
+                    ml: 1
+                  }}
+                />
+              ) : (
+                product.brand
+              )}
             </Typography>
+
+            {/* Add Payment Methods Section */}
+            <Box sx={{ mt: 2, mb: 3 }}>
+              <Typography variant="subtitle2" sx={{ color: '#075364', fontWeight: 600, mb: 1 }}>
+                Payment Methods:
+              </Typography>
+              <Box sx={{ 
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+                mt: 1
+              }}>
+                {Object.entries(paymentLogos).map(([name, url]) => (
+                  <Box
+                    key={name}
+                    component="img"
+                    src={url}
+                    alt={`${name} logo`}
+                    sx={{
+                      height: name === 'visa' ? '20px' : '28px',
+                      width: 'auto',
+                      filter: 'none'
+                    }}
+                  />
+                ))}
+              </Box>
+            </Box>
 
             {/* Size Selection */}
             <Box sx={{ mt: 3 }}>
