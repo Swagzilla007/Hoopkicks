@@ -32,6 +32,26 @@ export default function Navbar() {
     setMobileMenuAnchor(null);
   };
 
+  const handleLogout = async () => {
+    try {
+      // First clear local storage
+      localStorage.clear();
+      
+      // Then call the logout API
+      await logout();
+      
+      // Close mobile menu if open
+      handleMobileMenuClose();
+      
+      // Wait for 2 seconds before redirecting
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   const navButtonStyle = {
     color: 'white',
     '&:hover': {
@@ -258,7 +278,7 @@ export default function Navbar() {
                 {user.name}
               </Typography>
               <Button 
-                onClick={logout}
+                onClick={handleLogout} // Changed from logout to handleLogout
                 sx={{ 
                   color: 'white',
                   '&:hover': {
@@ -400,7 +420,7 @@ export default function Navbar() {
               </MenuItem>
               <MenuItem 
                 onClick={() => {
-                  logout();
+                  handleLogout();
                   handleMobileMenuClose();
                 }}
                 sx={{ color: '#f87b23' }}

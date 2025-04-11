@@ -33,9 +33,24 @@ export default function ProductCard({ product }) {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [isWishlisted, setIsWishlisted] = useState(false);
 
+  // Update wishlist state when component mounts and when wishlist changes
   useEffect(() => {
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    setIsWishlisted(wishlist.includes(product._id));
+    const updateWishlistState = () => {
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      setIsWishlisted(wishlist.includes(product._id));
+    };
+
+    // Initial check
+    updateWishlistState();
+
+    // Listen for wishlist changes
+    window.addEventListener('wishlistUpdated', updateWishlistState);
+    window.addEventListener('userLogout', updateWishlistState);
+
+    return () => {
+      window.removeEventListener('wishlistUpdated', updateWishlistState);
+      window.removeEventListener('userLogout', updateWishlistState);
+    };
   }, [product._id]);
 
   const handleClick = (event) => {
@@ -85,7 +100,7 @@ export default function ProductCard({ product }) {
     localStorage.setItem('wishlist', JSON.stringify(newWishlist));
     setIsWishlisted(!isWishlisted);
     
-    // Dispatch custom event to notify WishlistButton
+    // Dispatch event to notify other components
     window.dispatchEvent(new Event('wishlistUpdated'));
   };
 

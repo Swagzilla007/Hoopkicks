@@ -43,7 +43,9 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     try {
       await authAPI.logout();
-      setShowLogoutMessage(true); // Show logout message
+      setShowLogoutMessage(true);
+      // Dispatch a custom event that CartContext will listen for
+      window.dispatchEvent(new Event('userLogout'));
       setTimeout(() => {
         setUser(null);
         setShowLogoutMessage(false);

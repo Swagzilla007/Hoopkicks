@@ -14,6 +14,17 @@ export function CartProvider({ children }) {
     localStorage.setItem('cart', JSON.stringify(items));
   }, [items]);
 
+  // Add event listener for user logout
+  useEffect(() => {
+    const handleLogout = () => {
+      clearCart();
+      localStorage.removeItem('wishlist'); // Clear wishlist on logout
+    };
+
+    window.addEventListener('userLogout', handleLogout);
+    return () => window.removeEventListener('userLogout', handleLogout);
+  }, []);
+
   const addToCart = (product, size) => {
     if (user?.role === 'admin') {
       console.error('Admins cannot add items to cart');

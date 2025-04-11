@@ -49,7 +49,15 @@ export default function WishlistButton({ products }) {
           }
         }}
       >
-        <Badge badgeContent={wishlistedProducts.length} color="primary">
+        <Badge 
+          badgeContent={wishlistedProducts.length} 
+          sx={{
+            '& .MuiBadge-badge': {
+              backgroundColor: '#075364', // Changed to theme green
+              color: 'white'
+            }
+          }}
+        >
           <Favorite sx={{ color: '#f87b23' }} />
         </Badge>
       </IconButton>
