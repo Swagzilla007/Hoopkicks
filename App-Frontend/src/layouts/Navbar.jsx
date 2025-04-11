@@ -238,7 +238,15 @@ export default function Navbar() {
             </Button>
           ) : (
             <IconButton component={Link} to="/cart" sx={navButtonStyle}>
-              <Badge badgeContent={cartItemCount} color="primary">
+              <Badge 
+                badgeContent={cartItemCount} 
+                sx={{
+                  '& .MuiBadge-badge': {
+                    backgroundColor: '#f87b23',
+                    color: 'white'
+                  }
+                }}
+              >
                 <ShoppingCart />
               </Badge>
             </IconButton>

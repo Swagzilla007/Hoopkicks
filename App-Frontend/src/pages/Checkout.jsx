@@ -78,7 +78,11 @@ export default function Checkout() {
         totalAmount: getCartTotal() // Total is already in LKR
       };
 
-      navigate('/payment', { state: { orderData } });
+      // Store order data in localStorage
+      localStorage.setItem('orderData', JSON.stringify(orderData));
+      
+      // Navigate to payment page
+      navigate('/payment');
     }
   };
 
@@ -97,14 +101,76 @@ export default function Checkout() {
   }
 
   return (
-    <Container sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom>Checkout</Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>Shipping Information</Typography>
+    <Container maxWidth="lg" sx={{ mt: 6, mb: 8, minHeight: '100vh' }}>
+      <Typography 
+        variant="h4" 
+        gutterBottom
+        sx={{ 
+          color: '#075364',
+          position: 'relative',
+          pb: 2,
+          mb: 4,
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '60px',
+            height: '4px',
+            backgroundColor: '#f87b23',
+            borderRadius: '2px'
+          }
+        }}
+      >
+        Checkout
+      </Typography>
+
+      <Box sx={{ 
+        display: 'flex', 
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: 6, // Increased gap between containers
+        height: '100%',
+        px: { xs: 2, sm: 4 } // Added horizontal padding
+      }}>
+        {/* Left Side - Shipping Information */}
+        <Box sx={{ flex: '1 1 60%' }}>
+          <Paper elevation={0} sx={{ 
+            p: { xs: 4, md: 6 }, // Increased padding
+            height: '100%',
+            borderRadius: '16px',
+            border: '1px solid rgba(7, 83, 100, 0.1)',
+            boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              transform: 'translate(-4px, -4px)',
+              boxShadow: '12px 12px 0px rgba(7, 83, 100, 0.1)',
+            }
+          }}>
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                color: '#075364',
+                mb: 4,
+                fontWeight: 'bold',
+                position: 'relative',
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: -8,
+                  left: 0,
+                  width: '40px',
+                  height: '4px',
+                  backgroundColor: '#f87b23',
+                  borderRadius: '2px'
+                }
+              }}
+            >
+              Shipping Information
+            </Typography>
+
             <form onSubmit={handleSubmit}>
-              <Grid container spacing={2}>
+              <Grid container spacing={5}> {/* Increased grid spacing */}
+                {/* First Name & Last Name */}
                 <Grid item xs={12} sm={6}>
                   <TextField
                     required
@@ -115,6 +181,42 @@ export default function Checkout() {
                     onChange={handleChange}
                     error={!!errors.firstName}
                     helperText={errors.firstName}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '12px',
+                        backgroundColor: 'rgba(7, 83, 100, 0.02)',
+                        transition: 'all 0.3s ease',
+                        '& fieldset': { 
+                          borderWidth: '1px',
+                          borderColor: 'rgba(7, 83, 100, 0.1)' 
+                        },
+                        '&:hover fieldset': { 
+                          borderColor: '#075364',
+                          borderWidth: '1px'
+                        },
+                        '&.Mui-focused': {
+                          backgroundColor: 'white',
+                          '& fieldset': { 
+                            borderColor: '#f87b23',
+                            borderWidth: '2px'
+                          }
+                        },
+                        '& input': {
+                          padding: '16px',
+                          color: '#075364'
+                        }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#075364',
+                        '&.Mui-focused': { 
+                          color: '#f87b23',
+                          fontWeight: '500'
+                        }
+                      },
+                      '& .MuiFormHelperText-root': {
+                        margin: '8px 0 0 4px'
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -127,6 +229,42 @@ export default function Checkout() {
                     onChange={handleChange}
                     error={!!errors.lastName}
                     helperText={errors.lastName}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '12px',
+                        backgroundColor: 'rgba(7, 83, 100, 0.02)',
+                        transition: 'all 0.3s ease',
+                        '& fieldset': { 
+                          borderWidth: '1px',
+                          borderColor: 'rgba(7, 83, 100, 0.1)' 
+                        },
+                        '&:hover fieldset': { 
+                          borderColor: '#075364',
+                          borderWidth: '1px'
+                        },
+                        '&.Mui-focused': {
+                          backgroundColor: 'white',
+                          '& fieldset': { 
+                            borderColor: '#f87b23',
+                            borderWidth: '2px'
+                          }
+                        },
+                        '& input': {
+                          padding: '16px',
+                          color: '#075364'
+                        }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#075364',
+                        '&.Mui-focused': { 
+                          color: '#f87b23',
+                          fontWeight: '500'
+                        }
+                      },
+                      '& .MuiFormHelperText-root': {
+                        margin: '8px 0 0 4px'
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -140,6 +278,42 @@ export default function Checkout() {
                     onChange={handleChange}
                     error={!!errors.email}
                     helperText={errors.email}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '12px',
+                        backgroundColor: 'rgba(7, 83, 100, 0.02)',
+                        transition: 'all 0.3s ease',
+                        '& fieldset': { 
+                          borderWidth: '1px',
+                          borderColor: 'rgba(7, 83, 100, 0.1)' 
+                        },
+                        '&:hover fieldset': { 
+                          borderColor: '#075364',
+                          borderWidth: '1px'
+                        },
+                        '&.Mui-focused': {
+                          backgroundColor: 'white',
+                          '& fieldset': { 
+                            borderColor: '#f87b23',
+                            borderWidth: '2px'
+                          }
+                        },
+                        '& input': {
+                          padding: '16px',
+                          color: '#075364'
+                        }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#075364',
+                        '&.Mui-focused': { 
+                          color: '#f87b23',
+                          fontWeight: '500'
+                        }
+                      },
+                      '& .MuiFormHelperText-root': {
+                        margin: '8px 0 0 4px'
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -152,6 +326,42 @@ export default function Checkout() {
                     onChange={handleChange}
                     error={!!errors.address}
                     helperText={errors.address}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '12px',
+                        backgroundColor: 'rgba(7, 83, 100, 0.02)',
+                        transition: 'all 0.3s ease',
+                        '& fieldset': { 
+                          borderWidth: '1px',
+                          borderColor: 'rgba(7, 83, 100, 0.1)' 
+                        },
+                        '&:hover fieldset': { 
+                          borderColor: '#075364',
+                          borderWidth: '1px'
+                        },
+                        '&.Mui-focused': {
+                          backgroundColor: 'white',
+                          '& fieldset': { 
+                            borderColor: '#f87b23',
+                            borderWidth: '2px'
+                          }
+                        },
+                        '& input': {
+                          padding: '16px',
+                          color: '#075364'
+                        }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#075364',
+                        '&.Mui-focused': { 
+                          color: '#f87b23',
+                          fontWeight: '500'
+                        }
+                      },
+                      '& .MuiFormHelperText-root': {
+                        margin: '8px 0 0 4px'
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -164,6 +374,42 @@ export default function Checkout() {
                     onChange={handleChange}
                     error={!!errors.city}
                     helperText={errors.city}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '12px',
+                        backgroundColor: 'rgba(7, 83, 100, 0.02)',
+                        transition: 'all 0.3s ease',
+                        '& fieldset': { 
+                          borderWidth: '1px',
+                          borderColor: 'rgba(7, 83, 100, 0.1)' 
+                        },
+                        '&:hover fieldset': { 
+                          borderColor: '#075364',
+                          borderWidth: '1px'
+                        },
+                        '&.Mui-focused': {
+                          backgroundColor: 'white',
+                          '& fieldset': { 
+                            borderColor: '#f87b23',
+                            borderWidth: '2px'
+                          }
+                        },
+                        '& input': {
+                          padding: '16px',
+                          color: '#075364'
+                        }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#075364',
+                        '&.Mui-focused': { 
+                          color: '#f87b23',
+                          fontWeight: '500'
+                        }
+                      },
+                      '& .MuiFormHelperText-root': {
+                        margin: '8px 0 0 4px'
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -176,6 +422,42 @@ export default function Checkout() {
                     onChange={handleChange}
                     error={!!errors.postalCode}
                     helperText={errors.postalCode}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '12px',
+                        backgroundColor: 'rgba(7, 83, 100, 0.02)',
+                        transition: 'all 0.3s ease',
+                        '& fieldset': { 
+                          borderWidth: '1px',
+                          borderColor: 'rgba(7, 83, 100, 0.1)' 
+                        },
+                        '&:hover fieldset': { 
+                          borderColor: '#075364',
+                          borderWidth: '1px'
+                        },
+                        '&.Mui-focused': {
+                          backgroundColor: 'white',
+                          '& fieldset': { 
+                            borderColor: '#f87b23',
+                            borderWidth: '2px'
+                          }
+                        },
+                        '& input': {
+                          padding: '16px',
+                          color: '#075364'
+                        }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#075364',
+                        '&.Mui-focused': { 
+                          color: '#f87b23',
+                          fontWeight: '500'
+                        }
+                      },
+                      '& .MuiFormHelperText-root': {
+                        margin: '8px 0 0 4px'
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -188,43 +470,156 @@ export default function Checkout() {
                     onChange={handleChange}
                     error={!!errors.phone}
                     helperText={errors.phone}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '12px',
+                        backgroundColor: 'rgba(7, 83, 100, 0.02)',
+                        transition: 'all 0.3s ease',
+                        '& fieldset': { 
+                          borderWidth: '1px',
+                          borderColor: 'rgba(7, 83, 100, 0.1)' 
+                        },
+                        '&:hover fieldset': { 
+                          borderColor: '#075364',
+                          borderWidth: '1px'
+                        },
+                        '&.Mui-focused': {
+                          backgroundColor: 'white',
+                          '& fieldset': { 
+                            borderColor: '#f87b23',
+                            borderWidth: '2px'
+                          }
+                        },
+                        '& input': {
+                          padding: '16px',
+                          color: '#075364'
+                        }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#075364',
+                        '&.Mui-focused': { 
+                          color: '#f87b23',
+                          fontWeight: '500'
+                        }
+                      },
+                      '& .MuiFormHelperText-root': {
+                        margin: '8px 0 0 4px'
+                      }
+                    }}
                   />
                 </Grid>
               </Grid>
             </form>
           </Paper>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>Order Summary</Typography>
-            <List>
+        </Box>
+
+        {/* Right Side - Order Summary */}
+        <Box sx={{ flex: '1 1 40%' }}>
+          <Paper elevation={0} sx={{ 
+            p: { xs: 4, md: 6 }, // Increased padding
+            height: '100%',
+            borderRadius: '12px',
+            border: '1px solid rgba(7, 83, 100, 0.1)',
+            boxShadow: '4px 4px 0px rgba(7, 83, 100, 0.1)',
+            position: 'sticky',
+            top: '2rem'
+          }}>
+            <Typography 
+              variant="h5" 
+              gutterBottom 
+              sx={{ 
+                color: '#075364',
+                mb: 3,
+                fontWeight: 'bold'
+              }}
+            >
+              Order Summary
+            </Typography>
+
+            <List sx={{ 
+              mb: 2,
+              flex: 1, // Added to allow list to grow
+              overflowY: 'auto' // Added scrolling for overflow
+            }}>
               {items.map((item) => (
-                <ListItem key={`${item.id}-${item.size}`}>
-                  <ListItemText
-                    primary={item.name}
-                    secondary={`Size: ${item.size} | Quantity: ${item.quantity}`}
-                  />
-                  <Typography>Rs. {(item.price * item.quantity).toLocaleString()}</Typography>
-                </ListItem>
+                <Box key={`${item.id}-${item.size}`}>
+                  <ListItem sx={{ px: 0 }}>
+                    <Box
+                      component="img"
+                      src={item.image?.startsWith('http') ? item.image : `http://localhost:5000${item.image}`}
+                      alt={item.name}
+                      sx={{
+                        width: 60,
+                        height: 60,
+                        objectFit: 'contain',
+                        borderRadius: '8px',
+                        mr: 2,
+                        bgcolor: '#f5f5f5'
+                      }}
+                    />
+                    <ListItemText
+                      primary={
+                        <Typography sx={{ color: '#075364', fontWeight: 500 }}>
+                          {item.name}
+                        </Typography>
+                      }
+                      secondary={
+                        <Typography variant="body2" sx={{ color: '#666' }}>
+                          Size: US {item.size} | Qty: {item.quantity}
+                        </Typography>
+                      }
+                    />
+                    <Typography sx={{ color: '#f87b23', fontWeight: 600 }}>
+                      Rs. {(item.price * item.quantity).toLocaleString()}
+                    </Typography>
+                  </ListItem>
+                  <Divider sx={{ my: 2 }} />
+                </Box>
               ))}
             </List>
-            <Divider sx={{ my: 2 }} />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-              <Typography variant="h6">Total:</Typography>
-              <Typography variant="h6">Rs. {getCartTotal().toLocaleString()}</Typography>
+
+            <Box sx={{ mb: 3 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                <Typography sx={{ color: '#666' }}>Subtotal</Typography>
+                <Typography sx={{ color: '#075364' }}>
+                  Rs. {getCartTotal().toLocaleString()}
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                <Typography sx={{ color: '#666' }}>Shipping</Typography>
+                <Typography sx={{ color: '#075364' }}>Free</Typography>
+              </Box>
             </Box>
+
+            <Divider sx={{ mb: 3 }} />
+
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+              <Typography variant="h6" sx={{ color: '#075364' }}>Total</Typography>
+              <Typography variant="h6" sx={{ color: '#f87b23' }}>
+                Rs. {getCartTotal().toLocaleString()}
+              </Typography>
+            </Box>
+
             <Button
               variant="contained"
-              color="primary"
               fullWidth
               size="large"
               onClick={handleSubmit}
+              sx={{
+                bgcolor: '#075364',
+                color: 'white',
+                '&:hover': {
+                  bgcolor: '#075364',
+                  color: '#f87b23'
+                }
+              }}
             >
               Place Order
             </Button>
           </Paper>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
+
       <Dialog 
         open={openDialog} 
         onClose={handleClose}

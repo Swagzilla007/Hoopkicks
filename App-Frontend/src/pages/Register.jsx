@@ -9,7 +9,9 @@ import {
   Box,
   Alert,
   Link,
-  Snackbar
+  Snackbar,
+  Dialog,
+  DialogContent
 } from '@mui/material';
 import { useAuth } from '../context/AuthContext';
 import { Celebration } from '@mui/icons-material';
@@ -235,44 +237,49 @@ export default function Register() {
           </Typography>
         </Box>
       </Snackbar>
-      <Box
+      <Dialog 
+        open={snackbar.open}
         sx={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          bgcolor: 'rgba(0, 0, 0, 0.7)',
-          display: snackbar.open ? 'flex' : 'none',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 9999,
+          '& .MuiDialog-paper': {
+            bgcolor: 'transparent',
+            boxShadow: 'none',
+            overflow: 'visible'
+          },
+          '& .MuiBackdrop-root': {  // Remove dark backdrop
+            backgroundColor: 'transparent'
+          }
         }}
       >
-        <Box
-          sx={{
+        <DialogContent>
+          <Box sx={{ 
             bgcolor: '#075364',
             p: 4,
             borderRadius: '12px',
             textAlign: 'center',
-            width: '90%',
-            maxWidth: '400px',
-            animation: 'fadeIn 0.5s ease-out',
-            '@keyframes fadeIn': {
-              from: { opacity: 0, transform: 'translateY(-20px)' },
-              to: { opacity: 1, transform: 'translateY(0)' }
+            boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.2)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            animation: 'popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+            '@keyframes popIn': {
+              '0%': { 
+                opacity: 0,
+                transform: 'scale(0.8)',
+              },
+              '100%': { 
+                opacity: 1,
+                transform: 'scale(1)',
+              }
             }
-          }}
-        >
-          <Celebration sx={{ fontSize: 80, color: '#f87b23', mb: 2 }} />
-          <Typography variant="h4" sx={{ color: 'white', mb: 2, fontWeight: 'bold' }}>
-            Welcome to HoopKicks!
-          </Typography>
-          <Typography variant="h6" sx={{ color: 'white' }}>
-            {`Great to have you with us, ${formData.name}!`}
-          </Typography>
-        </Box>
-      </Box>
+          }}>
+            <Celebration sx={{ fontSize: 80, color: '#f87b23', mb: 2 }} />
+            <Typography variant="h4" sx={{ color: 'white', mb: 2, fontWeight: 'bold' }}>
+              Welcome to HoopKicks!
+            </Typography>
+            <Typography variant="h6" sx={{ color: 'white' }}>
+              {`Great to have you with us, ${formData.name}!`}
+            </Typography>
+          </Box>
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 }
