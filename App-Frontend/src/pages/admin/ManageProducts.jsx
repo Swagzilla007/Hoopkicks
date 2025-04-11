@@ -40,6 +40,7 @@ export default function ManageProducts() {
   const [imagePreview, setImagePreview] = useState('');
   const [additionalImages, setAdditionalImages] = useState(['', '', '']);
   const [sizeStockPairs, setSizeStockPairs] = useState([{ size: '', stock: '' }]);
+  const [deleteDialog, setDeleteDialog] = useState({ open: false, productId: null });
 
   useEffect(() => {
     fetchProducts();
@@ -177,14 +178,17 @@ export default function ManageProducts() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
-      try {
-        await adminAPI.deleteProduct(id);
-        fetchProducts();
-      } catch (error) {
-        setError('Error deleting product');
-      }
+  const handleDeleteClick = (id) => {
+    setDeleteDialog({ open: true, productId: id });
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      await adminAPI.deleteProduct(deleteDialog.productId);
+      fetchProducts();
+      setDeleteDialog({ open: false, productId: null });
+    } catch (error) {
+      setError('Error deleting product');
     }
   };
 
@@ -204,12 +208,42 @@ export default function ManageProducts() {
 
   return (
     <AdminLayout>
-      <Container>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-          <Typography variant="h4">Manage Products</Typography>
-          <Button 
-            variant="contained" 
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
+        <Typography 
+          variant="h4" 
+          gutterBottom
+          sx={{ 
+            color: '#075364',
+            position: 'relative',
+            pb: 2,
+            mb: 4,
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: '60px',
+              height: '4px',
+              backgroundColor: '#f87b23',
+              borderRadius: '2px'
+            }
+          }}
+        >
+          Manage Products
+        </Typography>
+
+        <Box sx={{ mb: 4 }}>
+          <Button
+            variant="contained"
             onClick={() => handleOpen()}
+            sx={{
+              bgcolor: '#075364',
+              color: 'white',
+              '&:hover': {
+                bgcolor: '#075364',
+                color: '#f87b23'
+              }
+            }}
           >
             Add New Product
           </Button>
@@ -217,58 +251,215 @@ export default function ManageProducts() {
 
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Brand</TableCell>
-                <TableCell>Category</TableCell>
-                <TableCell>Price (LKR)</TableCell>
-                <TableCell>Stock</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {products.map((product) => (
-                <TableRow key={product._id}>
-                  <TableCell>{product.name}</TableCell>
-                  <TableCell>{product.brand}</TableCell>
-                  <TableCell>{product.category}</TableCell>
-                  <TableCell>Rs. {product.price.toLocaleString()}</TableCell>
-                  <TableCell>
-                    {Array.isArray(product.sizes) ? 
-                      product.sizes.map(s => 
-                        `Size ${s.size}: ${s.stock}`
-                      ).join(', ') : 
-                      'No sizes available'
-                    }
+        <Paper 
+          elevation={0} 
+          sx={{ 
+            p: 3,
+            borderRadius: '12px',
+            border: '1px solid rgba(7, 83, 100, 0.1)',
+            boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)',
+            overflow: 'hidden'
+          }}
+        >
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: 'rgba(7, 83, 100, 0.02)' }}>
+                  <TableCell sx={{ 
+                    fontWeight: '600', 
+                    color: '#075364',
+                    borderBottom: '2px solid rgba(7, 83, 100, 0.1)',
+                    py: 2.5,
+                    fontSize: '0.95rem'
+                  }}>
+                    Product Name
                   </TableCell>
-                  <TableCell>
-                    <IconButton 
-                      onClick={() => handleOpen(product)} 
-                      color="primary"
-                    >
-                      <Edit />
-                    </IconButton>
-                    <IconButton 
-                      onClick={() => handleDelete(product._id)} 
-                      color="error"
-                    >
-                      <Delete />
-                    </IconButton>
+                  <TableCell sx={{ 
+                    fontWeight: '600', 
+                    color: '#075364',
+                    borderBottom: '2px solid rgba(7, 83, 100, 0.1)',
+                    py: 2.5,
+                    fontSize: '0.95rem'
+                  }}>
+                    Brand
+                  </TableCell>
+                  <TableCell sx={{ 
+                    fontWeight: '600', 
+                    color: '#075364',
+                    borderBottom: '2px solid rgba(7, 83, 100, 0.1)',
+                    py: 2.5,
+                    fontSize: '0.95rem'
+                  }}>
+                    Category
+                  </TableCell>
+                  <TableCell sx={{ 
+                    fontWeight: '600', 
+                    color: '#075364',
+                    borderBottom: '2px solid rgba(7, 83, 100, 0.1)',
+                    py: 2.5,
+                    fontSize: '0.95rem'
+                  }}>
+                    Price (LKR)
+                  </TableCell>
+                  <TableCell sx={{ 
+                    fontWeight: '600', 
+                    color: '#075364',
+                    borderBottom: '2px solid rgba(7, 83, 100, 0.1)',
+                    py: 2.5,
+                    fontSize: '0.95rem'
+                  }}>
+                    Stock
+                  </TableCell>
+                  <TableCell sx={{ 
+                    fontWeight: '600', 
+                    color: '#075364',
+                    borderBottom: '2px solid rgba(7, 83, 100, 0.1)',
+                    py: 2.5,
+                    fontSize: '0.95rem'
+                  }}>
+                    Actions
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {products.map((product, index) => (
+                  <TableRow 
+                    key={product._id}
+                    sx={{
+                      transition: 'all 0.2s ease',
+                      '&:hover': {
+                        bgcolor: 'rgba(7, 83, 100, 0.02)',
+                        transform: 'translateX(6px)'
+                      },
+                      // Add subtle alternating background
+                      bgcolor: index % 2 === 0 ? 'transparent' : 'rgba(7, 83, 100, 0.01)'
+                    }}
+                  >
+                    <TableCell sx={{ 
+                      py: 2,
+                      color: '#075364',
+                      fontWeight: '500',
+                      borderBottom: '1px solid rgba(7, 83, 100, 0.1)'
+                    }}>
+                      {product.name}
+                    </TableCell>
+                    <TableCell sx={{ 
+                      color: '#666',
+                      borderBottom: '1px solid rgba(7, 83, 100, 0.1)'
+                    }}>
+                      {product.brand}
+                    </TableCell>
+                    <TableCell sx={{ 
+                      borderBottom: '1px solid rgba(7, 83, 100, 0.1)'
+                    }}>
+                      <Box sx={{ 
+                        bgcolor: product.category === 'men' ? 'rgba(7, 83, 100, 0.08)' : 'rgba(248, 123, 35, 0.08)',
+                        color: product.category === 'men' ? '#075364' : '#f87b23',
+                        py: 0.5,
+                        px: 1.5,
+                        borderRadius: '4px',
+                        display: 'inline-block',
+                        fontSize: '0.85rem',
+                        fontWeight: '500'
+                      }}>
+                        {product.category === 'men' ? "Men's" : "Women's"}
+                      </Box>
+                    </TableCell>
+                    <TableCell sx={{ 
+                      color: '#f87b23',
+                      fontWeight: '600',
+                      borderBottom: '1px solid rgba(7, 83, 100, 0.1)'
+                    }}>
+                      Rs. {product.price.toLocaleString()}
+                    </TableCell>
+                    <TableCell sx={{ 
+                      borderBottom: '1px solid rgba(7, 83, 100, 0.1)',
+                      maxWidth: '200px'
+                    }}>
+                      <Box sx={{ 
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 0.5
+                      }}>
+                        {product.sizes.map(s => (
+                          <Box key={s.size} sx={{ 
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            bgcolor: s.stock === 0 ? 'rgba(255, 61, 0, 0.08)' : 
+                                     s.stock <= 5 ? 'rgba(248, 123, 35, 0.08)' : 
+                                     'rgba(7, 83, 100, 0.08)',
+                            px: 1,
+                            py: 0.5,
+                            borderRadius: '4px',
+                            fontSize: '0.85rem'
+                          }}>
+                            <span style={{ color: '#075364', fontWeight: '500' }}>Size {s.size}</span>
+                            <span style={{ 
+                              color: s.stock === 0 ? '#ff3d00' : 
+                                     s.stock <= 5 ? '#f87b23' : 
+                                     '#075364',
+                              fontWeight: '500'
+                            }}>
+                              {s.stock} pcs
+                            </span>
+                          </Box>
+                        ))}
+                      </Box>
+                    </TableCell>
+                    <TableCell sx={{ 
+                      borderBottom: '1px solid rgba(7, 83, 100, 0.1)'
+                    }}>
+                      <Box sx={{ display: 'flex', gap: 1 }}>
+                        <IconButton 
+                          onClick={() => handleOpen(product)}
+                          sx={{ 
+                            color: '#075364',
+                            '&:hover': {
+                              color: '#f87b23',
+                              transform: 'scale(1.1)'
+                            },
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          <Edit />
+                        </IconButton>
+                        <IconButton 
+                          onClick={() => handleDeleteClick(product._id)}
+                          sx={{ 
+                            color: '#ff3d00',
+                            '&:hover': {
+                              color: '#d32f2f',
+                              transform: 'scale(1.1)'
+                            },
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          <Delete />
+                        </IconButton>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
 
-        <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-          <DialogTitle>
+        <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth PaperProps={{
+          sx: {
+            borderRadius: '12px',
+            border: '1px solid rgba(7, 83, 100, 0.1)',
+            boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)'
+          }
+        }}>
+          <DialogTitle sx={{ 
+            color: '#075364',
+            borderBottom: '1px solid rgba(7, 83, 100, 0.1)',
+            pb: 2
+          }}>
             {selectedProduct ? 'Edit Product' : 'Add New Product'}
           </DialogTitle>
-          <DialogContent>
+          <DialogContent sx={{ mt: 2 }}>
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
@@ -278,6 +469,17 @@ export default function ManageProducts() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: 'rgba(7, 83, 100, 0.2)' },
+                        '&:hover fieldset': { borderColor: '#075364' },
+                        '&.Mui-focused fieldset': { borderColor: '#f87b23' }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#075364',
+                        '&.Mui-focused': { color: '#f87b23' }
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -287,6 +489,17 @@ export default function ManageProducts() {
                     value={formData.brand}
                     onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
                     required
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: 'rgba(7, 83, 100, 0.2)' },
+                        '&:hover fieldset': { borderColor: '#075364' },
+                        '&.Mui-focused fieldset': { borderColor: '#f87b23' }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#075364',
+                        '&.Mui-focused': { color: '#f87b23' }
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -298,6 +511,17 @@ export default function ManageProducts() {
                     multiline
                     rows={4}
                     required
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: 'rgba(7, 83, 100, 0.2)' },
+                        '&:hover fieldset': { borderColor: '#075364' },
+                        '&.Mui-focused fieldset': { borderColor: '#f87b23' }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#075364',
+                        '&.Mui-focused': { color: '#f87b23' }
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -309,18 +533,50 @@ export default function ManageProducts() {
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     required
                     helperText="Enter price in Sri Lankan Rupees"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: 'rgba(7, 83, 100, 0.2)' },
+                        '&:hover fieldset': { borderColor: '#075364' },
+                        '&.Mui-focused fieldset': { borderColor: '#f87b23' }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#075364',
+                        '&.Mui-focused': { color: '#f87b23' }
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth required>
-                    <InputLabel>Category</InputLabel>
+                    <InputLabel id="category-label" sx={{ 
+                      color: '#075364',
+                      '&.Mui-focused': { color: '#f87b23' }  // Added color change on focus
+                    }}>
+                      Category
+                    </InputLabel>
                     <Select
+                      labelId="category-label"
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                       label="Category"
+                      sx={{
+                        minWidth: '200px',
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'rgba(7, 83, 100, 0.2)'
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#075364'
+                        },
+                        '&.Mui-focused': {  // Added text color change on focus
+                          color: '#f87b23'
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#f87b23'
+                        }
+                      }}
                     >
-                      <MenuItem value="men">Men</MenuItem>
-                      <MenuItem value="women">Women</MenuItem>
+                      <MenuItem value="men">Men's</MenuItem>
+                      <MenuItem value="women">Women's</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
@@ -352,7 +608,10 @@ export default function ManageProducts() {
                         <RemoveIcon />
                       </IconButton>
                       {index === sizeStockPairs.length - 1 && (
-                        <IconButton color="primary" onClick={addSizePair}>
+                        <IconButton 
+                          onClick={addSizePair}
+                          sx={{ color: '#075364' }} // Changed from color="primary"
+                        >
                           <AddIcon />
                         </IconButton>
                       )}
@@ -360,7 +619,16 @@ export default function ManageProducts() {
                   ))}
                 </Grid>
                 <Grid item xs={12}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                  <Box sx={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'center', 
+                    gap: 2,
+                    p: 3,
+                    border: '1px dashed rgba(7, 83, 100, 0.2)',
+                    borderRadius: '12px',
+                    backgroundColor: 'rgba(7, 83, 100, 0.02)'
+                  }}>
                     {(imagePreview || formData.image) && (
                       <Box
                         component="img"
@@ -370,8 +638,8 @@ export default function ManageProducts() {
                           width: 200, 
                           height: 200, 
                           objectFit: 'contain',
-                          border: '1px solid #ddd',
-                          borderRadius: 1 
+                          borderRadius: '8px',
+                          boxShadow: '4px 4px 0px rgba(7, 83, 100, 0.1)'
                         }}
                       />
                     )}
@@ -379,8 +647,16 @@ export default function ManageProducts() {
                       component="label"
                       variant="contained"
                       startIcon={<CloudUpload />}
+                      sx={{
+                        bgcolor: '#075364',
+                        color: 'white',
+                        '&:hover': {
+                          bgcolor: '#075364',
+                          color: '#f87b23'
+                        }
+                      }}
                     >
-                      Upload Image
+                      Upload Main Image
                       <VisuallyHiddenInput 
                         type="file" 
                         onChange={handleImageUpload}
@@ -390,11 +666,27 @@ export default function ManageProducts() {
                   </Box>
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography variant="subtitle1" gutterBottom>Additional Images</Typography>
+                  <Typography variant="subtitle1" sx={{ 
+                    color: '#075364',
+                    fontWeight: 'bold',
+                    mb: 2 
+                  }}>
+                    Additional Images
+                  </Typography>
                   <Grid container spacing={2}>
                     {[0, 1, 2].map((index) => (
                       <Grid item xs={12} sm={4} key={index}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                        <Box sx={{ 
+                          display: 'flex', 
+                          flexDirection: 'column', 
+                          alignItems: 'center', 
+                          gap: 2,
+                          p: 2,
+                          border: '1px dashed rgba(7, 83, 100, 0.2)',
+                          borderRadius: '8px',
+                          backgroundColor: 'rgba(7, 83, 100, 0.02)',
+                          height: '100%'
+                        }}>
                           {additionalImages[index] && (
                             <Box
                               component="img"
@@ -402,15 +694,31 @@ export default function ManageProducts() {
                                 ? additionalImages[index] 
                                 : `http://localhost:5000${additionalImages[index]}`}
                               alt={`Additional ${index + 1}`}
-                              sx={{ width: 100, height: 100, objectFit: 'contain' }}
+                              sx={{ 
+                                width: 100, 
+                                height: 100, 
+                                objectFit: 'contain',
+                                borderRadius: '8px',
+                                boxShadow: '4px 4px 0px rgba(7, 83, 100, 0.1)'
+                              }}
                             />
                           )}
                           <Button
                             component="label"
                             variant="outlined"
                             size="small"
+                            startIcon={<CloudUpload />}
+                            sx={{
+                              color: '#075364',
+                              borderColor: 'rgba(7, 83, 100, 0.2)',
+                              '&:hover': {
+                                borderColor: '#075364',
+                                backgroundColor: 'rgba(7, 83, 100, 0.05)',
+                                color: '#f87b23'
+                              }
+                            }}
                           >
-                            Upload Image {index + 1}
+                            Image {index + 1}
                             <input
                               type="file"
                               hidden
@@ -426,10 +734,70 @@ export default function ManageProducts() {
               </Grid>
             </Box>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSubmit} variant="contained" color="primary">
+          <DialogActions sx={{ p: 3 }}>
+            <Button 
+              onClick={handleClose}
+              sx={{ 
+                color: '#075364',
+                '&:hover': { color: '#f87b23' }
+              }}
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleSubmit}
+              variant="contained"
+              sx={{
+                bgcolor: '#075364',
+                color: 'white',
+                '&:hover': {
+                  bgcolor: '#075364',
+                  color: '#f87b23'
+                }
+              }}
+            >
               {selectedProduct ? 'Update' : 'Create'}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog 
+          open={deleteDialog.open} 
+          onClose={() => setDeleteDialog({ open: false, productId: null })}
+          PaperProps={{
+            sx: {
+              borderRadius: '12px',
+              border: '1px solid rgba(7, 83, 100, 0.1)',
+              boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)'
+            }
+          }}
+        >
+          <DialogTitle sx={{ color: '#075364' }}>Confirm Delete</DialogTitle>
+          <DialogContent>
+            <Typography>Are you sure you want to delete this product?</Typography>
+            <Typography variant="body2" sx={{ color: '#666', mt: 1 }}>
+              This action cannot be undone.
+            </Typography>
+          </DialogContent>
+          <DialogActions sx={{ p: 2 }}>
+            <Button 
+              onClick={() => setDeleteDialog({ open: false, productId: null })}
+              sx={{ color: '#075364' }}
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleDeleteConfirm}
+              variant="contained"
+              sx={{
+                bgcolor: '#ff3d00',
+                color: 'white',
+                '&:hover': {
+                  bgcolor: '#d32f2f'
+                }
+              }}
+            >
+              Delete
             </Button>
           </DialogActions>
         </Dialog>

@@ -99,22 +99,16 @@ export default function Navbar() {
           sx={{
             display: { xs: 'none', lg: 'flex' }, // Changed from md to lg
             position: 'absolute',
-            left: '50%',
-            transform: 'translateX(-50%)',
+            left: user?.role === 'admin' ? '35%' : '50%', // Move left if admin
+            transform: user?.role === 'admin' ? 
+              'translateX(-35%)' : 
+              'translateX(-50%)', // Adjust transform if admin
             width: '300px',
             borderRadius: '8px',
             border: '1px solid #e0e0e0',
             backgroundColor: 'white',
             boxShadow: '4px 4px 0px #075364',
-            transition: 'all 0.2s ease',
-            '&:hover': {
-              transform: 'translateX(-50%) translate(-2px, -2px)',
-              boxShadow: '6px 6px 0px #075364',
-            },
-            ...(searchFocus && {
-              transform: 'translateX(-50%) translate(-2px, -2px)',
-              boxShadow: '6px 6px 0px #075364',
-            })
+            // Removed hover and transition effects
           }}
         >
           <Box sx={{ 
@@ -153,10 +147,13 @@ export default function Navbar() {
           />
         </Box>
 
-        {/* Filter Button */}
+        {/* Filter Button - Hide on mobile */}
         <IconButton 
           sx={{ 
             color: '#f87b23', // Changed to orange
+            position: user?.role === 'admin' ? 'relative' : 'static', // Adjust position if admin
+            left: user?.role === 'admin' ? '-120px' : 'auto', // Increased left offset
+            display: { xs: 'none', lg: 'flex' }, // Hide on mobile
             '&:hover': { 
               color: '#e66a0f' // Darker orange on hover 
             }
@@ -253,7 +250,19 @@ export default function Navbar() {
           <Button component={Link} to="/about" sx={navButtonStyle}>About Us</Button>
           
           {user?.role === 'admin' ? (
-            <Button component={Link} to="/admin" sx={navButtonStyle}>
+            <Button 
+              component={Link} 
+              to="/admin" 
+              variant="contained"
+              sx={{ 
+                backgroundColor: '#f87b23',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: '#e66a0f',
+                  color: 'white'
+                }
+              }}
+            >
               Admin Dashboard
             </Button>
           ) : (
@@ -279,10 +288,13 @@ export default function Navbar() {
               </Typography>
               <Button 
                 onClick={handleLogout} // Changed from logout to handleLogout
+                variant="contained"
                 sx={{ 
+                  backgroundColor: '#f87b23',
                   color: 'white',
                   '&:hover': {
-                    color: '#f87b23'
+                    backgroundColor: '#e66a0f',
+                    color: 'white'
                   }
                 }}
               >
@@ -337,7 +349,7 @@ export default function Navbar() {
           <MenuIcon />
         </IconButton>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - Updated Styling */}
         <Menu
           anchorEl={mobileMenuAnchor}
           open={Boolean(mobileMenuAnchor)}
@@ -346,50 +358,70 @@ export default function Navbar() {
             sx: {
               mt: 1.5,
               width: '100%',
-              maxWidth: '300px'
+              maxWidth: '300px',
+              borderRadius: '12px',
+              border: '1px solid rgba(7, 83, 100, 0.1)',
+              boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)',
+              overflow: 'hidden'
             }
           }}
         >
           {/* Search Bar in Mobile Menu */}
-          <MenuItem sx={{ p: 2 }}>
-            <Box sx={{ width: '100%' }}>
+          <MenuItem sx={{ p: 2, borderBottom: '1px solid rgba(7, 83, 100, 0.1)' }}>
+            <Box sx={{ 
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1
+            }}>
               <InputBase
                 placeholder="Search products…"
                 fullWidth
                 sx={{
-                  border: '1px solid #e0e0e0',
-                  borderRadius: 1,
-                  p: 1
+                  border: '1px solid rgba(7, 83, 100, 0.1)',
+                  borderRadius: '8px',
+                  p: 1,
+                  '&:hover': {
+                    borderColor: '#075364'
+                  }
                 }}
               />
+              <IconButton 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFilterClick(e);
+                }}
+                sx={{ 
+                  color: '#f87b23',
+                  '&:hover': { color: '#e66a0f' }
+                }}
+              >
+                <FilterList />
+              </IconButton>
             </Box>
           </MenuItem>
 
-          {/* Navigation Links */}
-          <MenuItem 
-            component={Link} 
-            to="/men"
-            onClick={handleMobileMenuClose}
-            sx={{ color: '#075364' }}
-          >
-            Men
-          </MenuItem>
-          <MenuItem 
-            component={Link} 
-            to="/women"
-            onClick={handleMobileMenuClose}
-            sx={{ color: '#075364' }}
-          >
-            Women
-          </MenuItem>
-          <MenuItem 
-            component={Link} 
-            to="/about"
-            onClick={handleMobileMenuClose}
-            sx={{ color: '#075364' }}
-          >
-            About Us
-          </MenuItem>
+          {/* Navigation Links - Updated Styling */}
+          {['Men', 'Women', 'About Us'].map((item, index) => (
+            <MenuItem 
+              key={item}
+              component={Link} 
+              to={`/${item.toLowerCase().replace(' ', '-')}`}
+              onClick={handleMobileMenuClose}
+              sx={{ 
+                p: 2,
+                color: '#075364',
+                transition: 'all 0.2s ease',
+                borderBottom: '1px solid rgba(7, 83, 100, 0.1)',
+                '&:hover': {
+                  bgcolor: 'rgba(7, 83, 100, 0.05)',
+                  color: '#f87b23'
+                }
+              }}
+            >
+              {item}
+            </MenuItem>
+          ))}
 
           {/* Cart or Admin Dashboard */}
           {user?.role === 'admin' ? (
@@ -397,7 +429,14 @@ export default function Navbar() {
               component={Link} 
               to="/admin"
               onClick={handleMobileMenuClose}
-              sx={{ color: '#075364' }}
+              sx={{ 
+                p: 2,
+                color: 'white',
+                bgcolor: '#f87b23',
+                '&:hover': {
+                  bgcolor: '#e66a0f'
+                }
+              }}
             >
               Admin Dashboard
             </MenuItem>
@@ -406,7 +445,15 @@ export default function Navbar() {
               component={Link} 
               to="/cart"
               onClick={handleMobileMenuClose}
-              sx={{ color: '#075364' }}
+              sx={{ 
+                p: 2,
+                color: '#075364',
+                borderBottom: '1px solid rgba(7, 83, 100, 0.1)',
+                '&:hover': {
+                  bgcolor: 'rgba(7, 83, 100, 0.05)',
+                  color: '#f87b23'
+                }
+              }}
             >
               Cart ({cartItemCount})
             </MenuItem>
@@ -414,27 +461,37 @@ export default function Navbar() {
 
           {/* Auth Buttons */}
           {user ? (
-            <>
-              <MenuItem sx={{ color: '#075364' }}>
-                {user.name}
-              </MenuItem>
-              <MenuItem 
-                onClick={() => {
-                  handleLogout();
-                  handleMobileMenuClose();
-                }}
-                sx={{ color: '#f87b23' }}
-              >
-                Logout
-              </MenuItem>
-            </>
+            <MenuItem 
+              onClick={() => {
+                handleLogout();
+                handleMobileMenuClose();
+              }}
+              sx={{ 
+                p: 2,
+                color: 'white',
+                bgcolor: '#f87b23',
+                '&:hover': {
+                  bgcolor: '#e66a0f'
+                }
+              }}
+            >
+              Logout
+            </MenuItem>
           ) : (
             <>
               <MenuItem 
                 component={Link} 
                 to="/login"
                 onClick={handleMobileMenuClose}
-                sx={{ color: '#f87b23' }}
+                sx={{ 
+                  p: 2,
+                  color: '#075364',
+                  borderBottom: '1px solid rgba(7, 83, 100, 0.1)',
+                  '&:hover': {
+                    bgcolor: 'rgba(7, 83, 100, 0.05)',
+                    color: '#f87b23'
+                  }
+                }}
               >
                 Login
               </MenuItem>
@@ -442,7 +499,14 @@ export default function Navbar() {
                 component={Link} 
                 to="/register"
                 onClick={handleMobileMenuClose}
-                sx={{ color: '#f87b23' }}
+                sx={{ 
+                  p: 2,
+                  color: '#075364',
+                  '&:hover': {
+                    bgcolor: 'rgba(7, 83, 100, 0.05)',
+                    color: '#f87b23'
+                  }
+                }}
               >
                 Register
               </MenuItem>

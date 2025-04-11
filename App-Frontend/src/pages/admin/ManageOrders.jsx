@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   Container, Typography, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow, Paper, Select, MenuItem,
-  CircularProgress, Alert, IconButton, Box, Grid, Divider
+  CircularProgress, Alert, IconButton, Box, Grid, Divider, Button, Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
 import { Delete, Person, Email, Phone, LocationOn, ExpandMore, ExpandLess, Inventory, CheckCircle, LocalShipping, PendingActions, Cached } from '@mui/icons-material';
 import { adminAPI } from '../../utils/api';
@@ -13,6 +13,7 @@ export default function ManageOrders() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedOrder, setExpandedOrder] = useState(null);
+  const [deleteDialog, setDeleteDialog] = useState({ open: false, orderId: null });
 
   useEffect(() => {
     fetchOrders();
@@ -41,14 +42,17 @@ export default function ManageOrders() {
     }
   };
 
-  const handleDeleteOrder = async (orderId) => {
-    if (window.confirm('Are you sure you want to delete this order?')) {
-      try {
-        await adminAPI.deleteOrder(orderId);
-        fetchOrders();
-      } catch (err) {
-        setError('Failed to delete order');
-      }
+  const handleDeleteClick = (id) => {
+    setDeleteDialog({ open: true, orderId: id });
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      await adminAPI.deleteOrder(deleteDialog.orderId);
+      fetchOrders();
+      setDeleteDialog({ open: false, orderId: null });
+    } catch (err) {
+      setError('Failed to delete order');
     }
   };
 
@@ -104,7 +108,28 @@ export default function ManageOrders() {
   return (
     <AdminLayout>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
-        <Typography variant="h4" gutterBottom>Manage Orders</Typography>
+        <Typography 
+          variant="h4" 
+          gutterBottom
+          sx={{ 
+            color: '#075364',
+            position: 'relative',
+            pb: 2,
+            mb: 4,
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: '60px',
+              height: '4px',
+              backgroundColor: '#f87b23',
+              borderRadius: '2px'
+            }
+          }}
+        >
+          Manage Orders
+        </Typography>
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         {orders.map((order) => (
           <Paper
@@ -282,7 +307,7 @@ export default function ManageOrders() {
                   </Select>
                   <IconButton 
                     color="error"
-                    onClick={() => handleDeleteOrder(order._id)}
+                    onClick={() => handleDeleteClick(order._id)}
                   >
                     <Delete />
                   </IconButton>
@@ -292,6 +317,47 @@ export default function ManageOrders() {
           </Paper>
         ))}
       </Container>
+
+      <Dialog 
+        open={deleteDialog.open} 
+        onClose={() => setDeleteDialog({ open: false, orderId: null })}
+        PaperProps={{
+          sx: {
+            borderRadius: '12px',
+            border: '1px solid rgba(7, 83, 100, 0.1)',
+            boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)'
+          }
+        }}
+      >
+        <DialogTitle sx={{ color: '#075364' }}>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to delete this order?</Typography>
+          <Typography variant="body2" sx={{ color: '#666', mt: 1 }}>
+            This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ p: 2 }}>
+          <Button 
+            onClick={() => setDeleteDialog({ open: false, orderId: null })}
+            sx={{ color: '#075364' }}
+          >
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleDeleteConfirm}
+            variant="contained"
+            sx={{
+              bgcolor: '#ff3d00',
+              color: 'white',
+              '&:hover': {
+                bgcolor: '#d32f2f'
+              }
+            }}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </AdminLayout>
   );
 }
