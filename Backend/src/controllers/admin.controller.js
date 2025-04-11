@@ -24,13 +24,31 @@ export const updateOrder = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-    const order = await Order.findByIdAndUpdate(
-      id,
-      { status },
-      { new: true }
-    );
+
+    const order = await Order.findById(id);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Only add to history if status is different from current status
+    if (status !== order.status) {
+      // Add new status to history
+      if (!order.statusHistory) {
+        order.statusHistory = [];
+      }
+      order.statusHistory.push({
+        status: status,
+        date: new Date()
+      });
+      
+      // Update the current status
+      order.status = status;
+      await order.save();
+    }
+
     res.json(order);
   } catch (error) {
+    console.error('Error updating order:', error);
     res.status(500).json({ message: 'Error updating order' });
   }
 };

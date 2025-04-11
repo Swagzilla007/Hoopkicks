@@ -42,11 +42,24 @@ const orderSchema = new mongoose.Schema({
     enum: ['pending', 'processing', 'shipped', 'delivered'],
     default: 'pending'
   },
+  statusHistory: [{
+    status: {
+      type: String,
+      enum: ['pending', 'processing', 'shipped', 'delivered']
+    },
+    date: {
+      type: Date,
+      default: Date.now
+    }
+  }],
   createdAt: {
     type: Date,
     default: Date.now
   }
 });
+
+// Remove the pre-save middleware since we'll handle status history in the controller
+// orderSchema.pre('save', function(next) {...});
 
 const Order = mongoose.model('Order', orderSchema);
 export default Order;

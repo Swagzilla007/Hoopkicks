@@ -293,6 +293,48 @@ export default function ManageOrders() {
                   </Grid>
                 </Grid>
 
+                {/* Add this inside the expanded content section where the order details are shown */}
+                <Box sx={{ mt: 3, p: 2, bgcolor: 'rgba(7, 83, 100, 0.02)', borderRadius: '8px' }}>
+                  <Typography variant="subtitle1" sx={{ color: '#075364', fontWeight: 600, mb: 2 }}>
+                    Status History
+                  </Typography>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    {order.statusHistory?.map((history, index) => (
+                      <Box 
+                        key={index}
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          p: 1.5,
+                          borderRadius: '6px',
+                          bgcolor: 'white',
+                          border: '1px solid rgba(7, 83, 100, 0.1)'
+                        }}
+                      >
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          {getStatusInfo(history.status).icon}
+                          <Typography sx={{ 
+                            color: getStatusInfo(history.status).color,
+                            fontWeight: 500
+                          }}>
+                            {getStatusInfo(history.status).label}
+                          </Typography>
+                        </Box>
+                        <Typography sx={{ color: '#666', fontSize: '0.9rem' }}>
+                          {new Date(history.date).toLocaleString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+
                 {/* Existing action buttons */}
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
                   <Select
