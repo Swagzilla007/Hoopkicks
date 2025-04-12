@@ -65,7 +65,7 @@ export default function Checkout() {
           product: item._id || item.id,
           size: item.size,
           quantity: item.quantity,
-          price: item.price // Price is already in LKR
+          price: item.price 
         })),
         shippingAddress: {
           name: `${formData.firstName} ${formData.lastName}`,
@@ -75,19 +75,19 @@ export default function Checkout() {
           postalCode: formData.postalCode,
           phone: formData.phone
         },
-        totalAmount: getCartTotal() // Total is already in LKR
+        totalAmount: getCartTotal() 
       };
 
-      // Store order data in localStorage
+      
       localStorage.setItem('orderData', JSON.stringify(orderData));
       
-      // Navigate to payment page
+      
       navigate('/payment');
     }
   };
 
   const handleClose = () => {
-    clearCart(); // Clear cart when dialog is closed
+    clearCart(); 
     setOpenDialog(false);
     navigate('/');
   };
@@ -128,14 +128,14 @@ export default function Checkout() {
       <Box sx={{ 
         display: 'flex', 
         flexDirection: { xs: 'column', md: 'row' },
-        gap: 6, // Increased gap between containers
+        gap: 6, 
         height: '100%',
-        px: { xs: 2, sm: 4 } // Added horizontal padding
+        px: { xs: 2, sm: 4 } 
       }}>
         {/* Left Side - Shipping Information */}
         <Box sx={{ flex: '1 1 60%' }}>
           <Paper elevation={0} sx={{ 
-            p: { xs: 4, md: 6 }, // Increased padding
+            p: { xs: 4, md: 6 }, 
             height: '100%',
             borderRadius: '16px',
             border: '1px solid rgba(7, 83, 100, 0.1)',
@@ -538,8 +538,8 @@ export default function Checkout() {
 
             <List sx={{ 
               mb: 2,
-              flex: 1, // Added to allow list to grow
-              overflowY: 'auto' // Added scrolling for overflow
+              flex: 1, 
+              overflowY: 'auto' 
             }}>
               {items.map((item) => (
                 <Box key={`${item.id}-${item.size}`}>

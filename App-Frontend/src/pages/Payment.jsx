@@ -51,10 +51,10 @@ export default function Payment() {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const { user } = useAuth();
 
-  // Get order data from localStorage
+  
   const orderData = JSON.parse(localStorage.getItem('orderData'));
 
-  // Redirect to cart if no order data
+  
   if (!orderData) {
     navigate('/cart');
     return null;
@@ -78,7 +78,7 @@ export default function Payment() {
       await orderAPI.createOrder(finalOrderData);
       setShowSuccessDialog(true);
 
-      // Clear cart and localStorage after 3 seconds
+      
       setTimeout(() => {
         clearCart();
         localStorage.removeItem('orderData');

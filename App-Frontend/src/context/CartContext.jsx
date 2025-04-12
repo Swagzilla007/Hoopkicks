@@ -14,11 +14,11 @@ export function CartProvider({ children }) {
     localStorage.setItem('cart', JSON.stringify(items));
   }, [items]);
 
-  // Add event listener for user logout
+  
   useEffect(() => {
     const handleLogout = () => {
       clearCart();
-      localStorage.removeItem('wishlist'); // Clear wishlist on logout
+      localStorage.removeItem('wishlist'); 
     };
 
     window.addEventListener('userLogout', handleLogout);
@@ -42,12 +42,11 @@ export function CartProvider({ children }) {
       );
 
       if (existingItem) {
-        // Just return current items without modification when item exists
-        // to avoid triggering unnecessary updates
+       
         return currentItems;
       }
 
-      // Add new item with quantity 1
+      
       return [...currentItems, { 
         ...product, 
         size, 

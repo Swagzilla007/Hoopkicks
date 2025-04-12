@@ -56,7 +56,7 @@ export default function Women() {
         <Box
           sx={{
             width: '100%',
-            height: { xs: '200px', sm: '300px', md: '400px' }, // Reduced heights
+            height: { xs: '200px', sm: '300px', md: '400px' }, 
             mb: 4,
             borderRadius: '12px',
             overflow: 'hidden',
@@ -65,7 +65,7 @@ export default function Women() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: 0 // Remove any padding
+            padding: 0 
           }}
         >
           <Box
@@ -75,9 +75,9 @@ export default function Women() {
             sx={{
               width: '100%',
               height: '100%',
-              objectFit: 'cover', // Changed back to 'cover'
-              objectPosition: 'center 60%', // Changed from 'center' to 'center 10%' to show more of top
-              transform: 'scale(0.95)', // Scaled down from 1.1 to 0.95
+              objectFit: 'cover', 
+              objectPosition: 'center 60%', 
+              transform: 'scale(0.95)', 
               transition: 'transform 0.3s ease'
             }}
           />
@@ -103,69 +103,133 @@ export default function Women() {
         >
           Women's Sneakers
         </Typography>
-        <Box sx={{ mb: 3 }}>
+        <Box sx={{ 
+          mb: 4,
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 2,
+          alignItems: 'center',
+          p: 3,
+          borderRadius: '12px',
+          backgroundColor: 'white',
+          border: '1px solid rgba(7, 83, 100, 0.1)',
+          boxShadow: '4px 4px 0px rgba(7, 83, 100, 0.1)'
+        }}>
+          <Typography variant="subtitle1" sx={{ 
+            color: '#075364',
+            fontWeight: 600,
+            mr: 2
+          }}>
+            Filters:
+          </Typography>
+          
           <FormControl sx={{ 
-            minWidth: 120, 
-            mr: 2,
+            minWidth: 200,
             '& .MuiOutlinedInput-root': {
+              borderRadius: '25px',
+              backgroundColor: 'rgba(7, 83, 100, 0.02)',
               '& fieldset': {
-                borderColor: 'rgba(7, 83, 100, 0.2)',
+                borderColor: 'rgba(7, 83, 100, 0.1)',
+                transition: 'all 0.2s ease'
               },
               '&:hover fieldset': {
-                borderColor: '#075364',
+                borderColor: '#075364'
               },
               '&.Mui-focused fieldset': {
-                borderColor: '#f87b23',
-              },
+                borderColor: '#f87b23'
+              }
+            },
+            '& .MuiSelect-select': {
+              paddingTop: '12px',
+              paddingBottom: '12px'
             },
             '& .MuiInputLabel-root': {
               color: '#075364',
               '&.Mui-focused': {
-                color: '#f87b23',
-              },
-            },
+                color: '#f87b23'
+              }
+            }
           }}>
             <InputLabel>Brand</InputLabel>
-            <Select value={brand} onChange={(e) => setBrand(e.target.value)} label="Brand">
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="nike">Nike</MenuItem>
-              <MenuItem value="adidas">Adidas</MenuItem>
-              <MenuItem value="jordan">Jordan</MenuItem>
-              <MenuItem value="new balance">New Balance</MenuItem>
+            <Select
+              value={brand}
+              onChange={(e) => setBrand(e.target.value)}
+              label="Brand"
+            >
+              <MenuItem value="">All Brands</MenuItem>
+              {['Nike', 'Adidas', 'Jordan', 'New Balance'].map((b) => (
+                <MenuItem key={b} value={b.toLowerCase()} sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1
+                }}>
+                  <Box sx={{ 
+                    width: 20, 
+                    height: 20, 
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    bgcolor: brand === b.toLowerCase() ? 'rgba(7, 83, 100, 0.1)' : 'transparent'
+                  }}>
+                    {brand === b.toLowerCase() && (
+                      <Box sx={{ 
+                        width: 8, 
+                        height: 8, 
+                        borderRadius: '50%', 
+                        bgcolor: '#f87b23' 
+                      }} />
+                    )}
+                  </Box>
+                  {b}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
+
           <FormControl sx={{ 
-            minWidth: 120,
+            minWidth: 200,
             '& .MuiOutlinedInput-root': {
+              borderRadius: '25px',
+              backgroundColor: 'rgba(7, 83, 100, 0.02)',
               '& fieldset': {
-                borderColor: 'rgba(7, 83, 100, 0.2)',
+                borderColor: 'rgba(7, 83, 100, 0.1)',
+                transition: 'all 0.2s ease'
               },
               '&:hover fieldset': {
-                borderColor: '#075364',
+                borderColor: '#075364'
               },
               '&.Mui-focused fieldset': {
-                borderColor: '#f87b23',
-              },
+                borderColor: '#f87b23'
+              }
+            },
+            '& .MuiSelect-select': {
+              paddingTop: '12px',
+              paddingBottom: '12px'
             },
             '& .MuiInputLabel-root': {
               color: '#075364',
               '&.Mui-focused': {
-                color: '#f87b23',
-              },
-            },
+                color: '#f87b23'
+              }
+            }
           }}>
-            <InputLabel>Price</InputLabel>
-            <Select value={priceRange} onChange={(e) => setPriceRange(e.target.value)} label="Price">
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="low">Under Rs. 15,000</MenuItem>
-              <MenuItem value="mid">Rs. 15,000 - Rs. 30,000</MenuItem>
-              <MenuItem value="high">Above Rs. 30,000</MenuItem>
+            <InputLabel>Price Range</InputLabel>
+            <Select
+              value={priceRange}
+              onChange={(e) => setPriceRange(e.target.value)}
+              label="Price Range"
+            >
+              <MenuItem value="">All Prices</MenuItem>
+              <MenuItem value="low" sx={{ color: '#4caf50' }}>Under Rs. 15,000</MenuItem>
+              <MenuItem value="mid" sx={{ color: '#f87b23' }}>Rs. 15,000 - Rs. 30,000</MenuItem>
+              <MenuItem value="high" sx={{ color: '#075364' }}>Above Rs. 30,000</MenuItem>
             </Select>
           </FormControl>
         </Box>
       </Container>
 
-      <Container sx={{ mt: 6, mb: 6 }}> {/* Added mb: 6 for spacing */}
+      <Container sx={{ mt: 6, mb: 6 }}>
         <Grid container spacing={3}>
           {filteredProducts.map(product => (
             <Grid item xs={12} sm={6} md={3} key={product._id}>
@@ -175,7 +239,7 @@ export default function Women() {
         </Grid>
       </Container>
 
-      {/* Moved BrandLogos to bottom */}
+    
       <BrandLogos />
     </Box>
   );

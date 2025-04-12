@@ -17,7 +17,7 @@ export default function AddAdmin({ open, onClose }) {
     name: '',
     email: '',
     password: '',
-    confirmPassword: '' // Added confirm password
+    confirmPassword: '' 
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -33,7 +33,7 @@ export default function AddAdmin({ open, onClose }) {
     }
 
     try {
-      // Remove confirmPassword before sending to API
+      
       const { confirmPassword, ...adminData } = formData;
       await adminAPI.createAdmin(adminData);
       setSuccess(true);

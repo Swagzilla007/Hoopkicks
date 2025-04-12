@@ -57,7 +57,7 @@ export default function ManageProducts() {
 
   const handleOpen = (product = null) => {
     if (product) {
-      console.log('Editing product:', product); // Debug log
+      console.log('Editing product:', product); 
       setSelectedProduct(product);
       setFormData({
         name: product.name,
@@ -68,7 +68,7 @@ export default function ManageProducts() {
         image: product.image,
         additionalImages: product.additionalImages || []
       });
-      // Ensure sizes array is properly formatted
+     
       setSizeStockPairs(
         Array.isArray(product.sizes) 
           ? product.sizes.map(s => ({
@@ -550,7 +550,7 @@ export default function ManageProducts() {
                   <FormControl fullWidth required>
                     <InputLabel id="category-label" sx={{ 
                       color: '#075364',
-                      '&.Mui-focused': { color: '#f87b23' }  // Added color change on focus
+                      '&.Mui-focused': { color: '#f87b23' }  
                     }}>
                       Category
                     </InputLabel>
@@ -610,7 +610,7 @@ export default function ManageProducts() {
                       {index === sizeStockPairs.length - 1 && (
                         <IconButton 
                           onClick={addSizePair}
-                          sx={{ color: '#075364' }} // Changed from color="primary"
+                          sx={{ color: '#075364' }} 
                         >
                           <AddIcon />
                         </IconButton>

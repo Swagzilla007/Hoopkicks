@@ -102,10 +102,10 @@ export default function AdminDashboard() {
         <Box sx={{ 
           mb: 6,
           display: 'flex',
-          flexDirection: 'row', // Changed to row
+          flexDirection: 'row', 
           gap: 2,
-          justifyContent: 'center', // Center the buttons
-          flexWrap: 'wrap' // Allow wrapping on smaller screens
+          justifyContent: 'center', 
+          flexWrap: 'wrap' 
         }}>
           <Button
             component={Link}
@@ -113,8 +113,8 @@ export default function AdminDashboard() {
             variant="contained"
             sx={{
               p: 2,
-              flex: '1 1 200px', // Equal width with minimum of 200px
-              maxWidth: '300px', // Maximum width for each button
+              flex: '1 1 200px', 
+              maxWidth: '300px', 
               bgcolor: '#075364',
               color: 'white',
               borderRadius: '12px',
@@ -138,8 +138,8 @@ export default function AdminDashboard() {
             variant="contained"
             sx={{
               p: 2,
-              flex: '1 1 200px', // Equal width with minimum of 200px
-              maxWidth: '300px', // Maximum width for each button
+              flex: '1 1 200px', 
+              maxWidth: '300px', 
               bgcolor: '#075364',
               color: 'white',
               borderRadius: '12px',
@@ -163,8 +163,8 @@ export default function AdminDashboard() {
             onClick={() => setOpenAddAdmin(true)}
             sx={{
               p: 2,
-              flex: '1 1 200px', // Equal width with minimum of 200px
-              maxWidth: '300px', // Maximum width for each button
+              flex: '1 1 200px', 
+              maxWidth: '300px', 
               bgcolor: '#075364',
               color: 'white',
               borderRadius: '12px',

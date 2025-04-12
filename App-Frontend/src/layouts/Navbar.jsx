@@ -34,16 +34,16 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      // First clear local storage
+      
       localStorage.clear();
       
-      // Then call the logout API
+      
       await logout();
       
-      // Close mobile menu if open
+      
       handleMobileMenuClose();
       
-      // Wait for 2 seconds before redirecting
+      
       setTimeout(() => {
         window.location.href = '/';
       }, 2000);
@@ -63,7 +63,7 @@ export default function Navbar() {
     <AppBar 
       position="sticky" 
       sx={{ 
-        backgroundColor: '#075364', // Changed to green
+        backgroundColor: '#075364', 
         boxShadow: 1,
         top: 0,
         zIndex: (theme) => theme.zIndex.drawer + 1
@@ -78,7 +78,7 @@ export default function Navbar() {
             display: 'flex', 
             alignItems: 'center', 
             textDecoration: 'none',
-            flex: '0 0 auto'  // Prevent logo from growing
+            flex: '0 0 auto'  
           }}
         >
           <Box
@@ -89,7 +89,7 @@ export default function Navbar() {
               height: '70px',
               width: 'auto',
               mr: 2,
-              filter: 'brightness(0) invert(1)' // This makes the logo white
+              filter: 'brightness(0) invert(1)' 
             }}
           />
         </Box>
@@ -97,18 +97,18 @@ export default function Navbar() {
         {/* Search Bar - Center Positioned */}
         <Box
           sx={{
-            display: { xs: 'none', lg: 'flex' }, // Changed from md to lg
+            display: { xs: 'none', lg: 'flex' }, 
             position: 'absolute',
-            left: user?.role === 'admin' ? '35%' : '50%', // Move left if admin
+            left: user?.role === 'admin' ? '35%' : '50%', 
             transform: user?.role === 'admin' ? 
               'translateX(-35%)' : 
-              'translateX(-50%)', // Adjust transform if admin
+              'translateX(-50%)', 
             width: '300px',
             borderRadius: '8px',
             border: '1px solid #e0e0e0',
             backgroundColor: 'white',
             boxShadow: '4px 4px 0px #075364',
-            // Removed hover and transition effects
+            
           }}
         >
           <Box sx={{ 
@@ -150,12 +150,12 @@ export default function Navbar() {
         {/* Filter Button - Hide on mobile */}
         <IconButton 
           sx={{ 
-            color: '#f87b23', // Changed to orange
-            position: user?.role === 'admin' ? 'relative' : 'static', // Adjust position if admin
-            left: user?.role === 'admin' ? '-120px' : 'auto', // Increased left offset
-            display: { xs: 'none', lg: 'flex' }, // Hide on mobile
+            color: '#f87b23', 
+            position: user?.role === 'admin' ? 'relative' : 'static', 
+            left: user?.role === 'admin' ? '-120px' : 'auto', 
+            display: { xs: 'none', lg: 'flex' }, 
             '&:hover': { 
-              color: '#e66a0f' // Darker orange on hover 
+              color: '#e66a0f'  
             }
           }}
           onClick={handleFilterClick}
@@ -240,10 +240,10 @@ export default function Navbar() {
 
         {/* Right Side Navigation */}
         <Box sx={{ 
-          display: { xs: 'none', lg: 'flex' }, // Changed from md to lg
+          display: { xs: 'none', lg: 'flex' }, 
           alignItems: 'center', 
           gap: 2,
-          flex: '0 0 auto'  // Prevent right side from growing
+          flex: '0 0 auto'  
         }}>
           <Button component={Link} to="/men" sx={navButtonStyle}>Men</Button>
           <Button component={Link} to="/women" sx={navButtonStyle}>Women</Button>
@@ -287,7 +287,7 @@ export default function Navbar() {
                 {user.name}
               </Typography>
               <Button 
-                onClick={handleLogout} // Changed from logout to handleLogout
+                onClick={handleLogout} 
                 variant="contained"
                 sx={{ 
                   backgroundColor: '#f87b23',
@@ -312,7 +312,7 @@ export default function Navbar() {
                   color: 'white',
                   '&:hover': {
                     backgroundColor: '#e66a0f',
-                    color: 'white' // Keep text white on hover
+                    color: 'white' 
                   }
                 }}
               >
@@ -327,7 +327,7 @@ export default function Navbar() {
                   color: 'white',
                   '&:hover': {
                     backgroundColor: '#e66a0f',
-                    color: 'white' // Keep text white on hover
+                    color: 'white' 
                   }
                 }}
               >
@@ -340,7 +340,7 @@ export default function Navbar() {
         {/* Mobile Menu Button */}
         <IconButton
           sx={{ 
-            display: { xs: 'flex', lg: 'none' }, // Changed from md to lg
+            display: { xs: 'flex', lg: 'none' }, 
             ml: 'auto',
             color: 'white'
           }}

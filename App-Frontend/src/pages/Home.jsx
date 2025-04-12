@@ -4,8 +4,8 @@ import { useInView } from 'react-intersection-observer';
 import ProductCard from '../components/ProductCard';
 import HeroSlider from '../components/HeroSlider';
 import { productAPI } from '../utils/api';
-import welcomeImage from '../assets/images/store1.jpg'; // Import the store image
-import mainLogo from '../assets/Logo main.png'; // Add this import
+import welcomeImage from '../assets/images/store1.jpg'; 
+import mainLogo from '../assets/Logo main.png'; 
 import { LocalShipping, Update, ThumbUp } from '@mui/icons-material';
 import upcomingTravisScott from '../assets/images/Upcoming-Travis-Scott-Shoes.webp';
 import cactusJack from '../assets/images/cactus jack.webp';
@@ -44,7 +44,7 @@ export default function Home() {
       <Box 
         ref={welcomeRef}
         sx={{ 
-          backgroundColor: '#075364', // Changed to green background
+          backgroundColor: '#075364', 
           py: 8,
           borderBottom: '1px solid #eaeaea',
           position: 'relative',
@@ -69,7 +69,7 @@ export default function Home() {
               overflow: 'hidden',
               transition: 'all 0.4s ease-in-out',
               display: 'flex',
-              flexDirection: { xs: 'column', md: 'row' }, // Stack on mobile
+              flexDirection: { xs: 'column', md: 'row' }, 
               alignItems: 'center',
               minHeight: { xs: 'auto', md: '400px' },
               position: 'relative',
@@ -178,7 +178,7 @@ export default function Home() {
                 style, comfort, and performance.
               </Typography>
 
-              {/* Service Highlights */}
+              
               <Box sx={{ 
                 display: 'flex', 
                 flexDirection: { xs: 'column', sm: 'row' },
@@ -246,7 +246,7 @@ export default function Home() {
         </Container>
       </Box>
 
-      {/* Future Releases and Offers Section */}
+      
       <Box sx={{ 
         mt: 6, 
         px: 0,
@@ -254,7 +254,7 @@ export default function Home() {
         flexDirection: { xs: 'column', md: 'row' },
         gap: { xs: 4, md: 0 }
       }}>
-        {/* Future Releases - Left Side */}
+        
         <Box sx={{ 
           width: { xs: '100%', md: '35%' },
           pl: { xs: 2, sm: 4, md: 6, lg: 8 },
@@ -282,13 +282,13 @@ export default function Home() {
                 p: 3,
                 position: 'relative',
                 fontSize: '1.5rem',
-                display: 'inline-block', // Added to match width with text
+                display: 'inline-block', 
                 '&::after': {
                   content: '""',
                   position: 'absolute',
                   bottom: 0,
                   left: 0,
-                  width: '100%', // Changed to match full text width
+                  width: '100%', 
                   height: '4px',
                   backgroundColor: '#f87b23',
                   borderRadius: '2px'
@@ -353,7 +353,7 @@ export default function Home() {
           </Box>
         </Box>
 
-        {/* Offers - Right Side */}
+        
         <Box sx={{ 
           width: { xs: '100%', md: '65%' },
           pr: { xs: 2, sm: 4, md: 6, lg: 8 },
@@ -383,7 +383,7 @@ export default function Home() {
                 p: 2,
                 position: 'relative',
                 fontSize: '1.5rem',
-                width: 'fit-content', // Added to match text width
+                width: 'fit-content', 
                 '&::after': {
                   content: '""',
                   position: 'absolute',
@@ -412,7 +412,7 @@ export default function Home() {
                 sx={{
                   width: '100%',
                   flex: 1,
-                  minHeight: '600px', // Increased height
+                  minHeight: '600px', 
                   objectFit: 'contain',
                   borderRadius: '8px',
                   mb: 2,
@@ -450,7 +450,7 @@ export default function Home() {
       </Box>
 
       {/* Products Section */}
-      <Container sx={{ mt: 6, mb: 6 }}> {/* Added mb: 6 for spacing */}
+      <Container sx={{ mt: 6, mb: 6 }}> 
         <Typography 
           variant="h4" 
           gutterBottom 
@@ -495,7 +495,7 @@ export default function Home() {
         )}
       </Container>
 
-      {/* Moved BrandLogos to bottom */}
+      
       <BrandLogos />
     </Box>
   );

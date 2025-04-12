@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, CardMedia, CardContent, Typography, Button, CardActions, Menu, MenuItem, Snackbar, Alert, IconButton, Box } from '@mui/material';
-import { FavoriteBorder, Favorite, ShoppingCart, Visibility } from '@mui/icons-material'; // Removed LocalAtm icon
+import { FavoriteBorder, Favorite, ShoppingCart, Visibility } from '@mui/icons-material'; 
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -11,7 +11,7 @@ const getImageUrl = (path) => {
   return `http://localhost:5000${path}`;
 };
 
-// Add payment logo URLs
+
 const paymentLogos = {
   visa: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg',
   mastercard: 'https://brand.mastercard.com/content/dam/mccom/global/logos/logo-mastercard-mobile.svg',
@@ -19,10 +19,10 @@ const paymentLogos = {
 };
 
 const brandLogos = {
-  nike: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/80px-Logo_NIKE.svg.png', // Even smaller Nike logo
+  nike: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/80px-Logo_NIKE.svg.png', 
   adidas: 'https://1000logos.net/wp-content/uploads/2016/10/Adidas-Logo.png',
   jordan: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Jumpman_logo.svg/640px-Jumpman_logo.svg.png',
-  'new balance': 'https://cdn.freebiesupply.com/logos/large/2x/new-balance-2-logo-png-transparent.png' // New cleaner logo URL
+  'new balance': 'https://cdn.freebiesupply.com/logos/large/2x/new-balance-2-logo-png-transparent.png' 
 };
 
 export default function ProductCard({ product }) {
@@ -33,17 +33,17 @@ export default function ProductCard({ product }) {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [isWishlisted, setIsWishlisted] = useState(false);
 
-  // Update wishlist state when component mounts and when wishlist changes
+ 
   useEffect(() => {
     const updateWishlistState = () => {
       const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
       setIsWishlisted(wishlist.includes(product._id));
     };
 
-    // Initial check
+    
     updateWishlistState();
 
-    // Listen for wishlist changes
+    
     window.addEventListener('wishlistUpdated', updateWishlistState);
     window.addEventListener('userLogout', updateWishlistState);
 
@@ -54,7 +54,7 @@ export default function ProductCard({ product }) {
   }, [product._id]);
 
   const handleClick = (event) => {
-    event.stopPropagation(); // Prevent event bubbling
+    event.stopPropagation(); 
     setAnchorEl(event.currentTarget);
   };
 
@@ -75,7 +75,7 @@ export default function ProductCard({ product }) {
 
     const productWithId = {
       ...product,
-      id: product._id // Ensure we're using MongoDB _id
+      id: product._id 
     };
     addToCart(productWithId, size);
     handleClose();
@@ -100,7 +100,7 @@ export default function ProductCard({ product }) {
     localStorage.setItem('wishlist', JSON.stringify(newWishlist));
     setIsWishlisted(!isWishlisted);
     
-    // Dispatch event to notify other components
+    
     window.dispatchEvent(new Event('wishlistUpdated'));
   };
 
@@ -127,8 +127,8 @@ export default function ProductCard({ product }) {
             bgcolor: 'rgba(255, 255, 255, 0.8)',
             zIndex: 3,
             '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.9)' },
-            '&:focus': { outline: 'none' }, // Remove focus outline
-            '&:active': { outline: 'none' }  // Remove active outline
+            '&:focus': { outline: 'none' }, 
+            '&:active': { outline: 'none' }  
           }}
         >
           {isWishlisted ? (
@@ -139,9 +139,9 @@ export default function ProductCard({ product }) {
         </IconButton>
       </Box>
 
-      {/* Content Container */}
+      
       <Box sx={{ position: 'relative', height: '200px', backgroundColor: 'white' }}>
-        {/* Sliding Content */}
+       
         <Box 
           sx={{ 
             position: 'absolute',
@@ -158,7 +158,7 @@ export default function ProductCard({ product }) {
             }
           }}
         >
-          {/* Regular Content */}
+         
           <CardContent sx={{ p: 2 }}>
             <Typography gutterBottom sx={{ fontWeight: 600, fontSize: '1.1rem', mb: 0.5 }}>
               {product.name}
@@ -167,7 +167,7 @@ export default function ProductCard({ product }) {
               Rs. {product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </Typography>
 
-            {/* Add these elements between price and hidden content */}
+          
             <Box sx={{ 
               display: 'flex', 
               alignItems: 'center', 
@@ -177,7 +177,7 @@ export default function ProductCard({ product }) {
               fontSize: '0.875rem',
               color: '#666'
             }}>
-              {/* Brand Logo or Text */}
+              
               <Box sx={{ 
                 display: 'inline-flex', 
                 alignItems: 'center',
@@ -207,7 +207,7 @@ export default function ProductCard({ product }) {
                 )}
               </Box>
 
-              {/* Rest of the existing tags */}
+              
               <Box sx={{ 
                 display: 'inline-flex', 
                 alignItems: 'center',
@@ -241,7 +241,7 @@ export default function ProductCard({ product }) {
               )}
             </Box>
 
-            {/* Hidden Content Container */}
+           
             <Box 
               className="hidden-content"
               sx={{ 
@@ -252,7 +252,7 @@ export default function ProductCard({ product }) {
                 transition: 'all 0.3s ease'
               }}
             >
-              {/* Payment Logos */}
+              
               <Box sx={{ 
                 display: 'flex',
                 alignItems: 'center',
@@ -267,7 +267,7 @@ export default function ProductCard({ product }) {
                     src={url}
                     alt={`${name} logo`}
                     sx={{
-                      height: name === 'visa' ? '20px' : '28px', // Reduced from 24px/32px
+                      height: name === 'visa' ? '20px' : '28px', 
                       width: 'auto',
                       filter: 'none'
                     }}
@@ -275,7 +275,7 @@ export default function ProductCard({ product }) {
                 ))}
               </Box>
 
-              {/* Modified Koko Offer */}
+             
               <Box sx={{ 
                 display: 'flex',
                 alignItems: 'center',
@@ -306,7 +306,7 @@ export default function ProductCard({ product }) {
           </CardContent>
         </Box>
 
-        {/* Fixed Button Section */}
+        
         <Box sx={{ 
           position: 'absolute',
           bottom: 0,

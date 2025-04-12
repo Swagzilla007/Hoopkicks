@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { useAuth } from '../context/AuthContext';
 import { CheckCircle } from '@mui/icons-material';
+import logoWide from '../assets/Logo wide.png'; 
 
 export default function Login() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export default function Login() {
         severity: 'success' 
       });
 
-      // Wait longer before navigating
+     
       setTimeout(() => {
         navigate('/');
       }, 3000);
@@ -43,94 +44,132 @@ export default function Login() {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 8, mb: 8 }}>
-      <Paper elevation={0} sx={{ 
-        p: 4,
-        borderRadius: '12px',
+    <Container maxWidth="md" sx={{ mt: 8, mb: 8 }}>
+      <Box sx={{
+        width: '100%',
+        height: '600px',
+        borderRadius: '24px',
+        overflow: 'hidden',
+        display: 'flex',
         boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)',
         border: '1px solid rgba(7, 83, 100, 0.1)'
       }}>
-        <Typography variant="h4" align="center" gutterBottom sx={{ 
-          color: '#075364',
-          fontWeight: 'bold',
-          position: 'relative',
-          pb: 2,
-          '&::after': {
-            content: '""',
-            position: 'absolute',
-            bottom: 0,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '60px',
-            height: '4px',
-            backgroundColor: '#f87b23',
-            borderRadius: '2px'
-          }
+        {/* Left Panel - Logo */}
+        <Box sx={{
+          width: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}>
-          Login
-        </Typography>
-        
-        {error && <Alert severity="error" sx={{ mb: 2, mt: 2 }}>{error}</Alert>}
-        
-        <form onSubmit={handleSubmit}>
-          <TextField
-            fullWidth
-            label="Email"
-            type="email"
-            margin="normal"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          <Box
+            component="img"
+            src={logoWide}
+            alt="HoopKicks Logo"
             sx={{
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': { borderColor: 'rgba(7, 83, 100, 0.2)' },
-                '&:hover fieldset': { borderColor: '#075364' },
-                '&.Mui-focused fieldset': { borderColor: '#f87b23' }
-              },
-              '& .MuiInputLabel-root': {
-                color: '#075364',
-                '&.Mui-focused': { color: '#f87b23' }
-              }
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain'
             }}
           />
-          <TextField
-            fullWidth
-            label="Password"
-            type="password"
-            margin="normal"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': { borderColor: 'rgba(7, 83, 100, 0.2)' },
-                '&:hover fieldset': { borderColor: '#075364' },
-                '&.Mui-focused fieldset': { borderColor: '#f87b23' }
-              },
-              '& .MuiInputLabel-root': {
-                color: '#075364',
-                '&.Mui-focused': { color: '#f87b23' }
-              }
-            }}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
+        </Box>
+
+        {/* Right Panel - Login Form */}
+        <Box sx={{
+          width: '50%',
+          bgcolor: 'white',
+          p: 6,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center'
+        }}>
+          <Typography 
+            variant="h4" 
+            align="left"
             sx={{ 
-              mt: 3, 
-              mb: 2,
-              bgcolor: '#075364',
-              color: 'white',
-              '&:hover': {
-                bgcolor: '#075364',
-                color: '#f87b23'
+              color: '#075364',
+              fontWeight: 'bold',
+              mb: 4,
+              position: 'relative',
+              pb: 2,
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '60px',
+                height: '4px',
+                backgroundColor: '#f87b23',
+                borderRadius: '2px'
               }
             }}
           >
-            Login
-          </Button>
-          <Box sx={{ textAlign: 'center' }}>
-            <Link 
-              component={RouterLink} 
+            Welcome
+          </Typography>
+
+          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
+          <form onSubmit={handleSubmit}>
+            <TextField
+              fullWidth
+              label="Email"
+              type="email"
+              margin="normal"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: 'rgba(7, 83, 100, 0.2)' },
+                  '&:hover fieldset': { borderColor: '#075364' },
+                  '&.Mui-focused fieldset': { borderColor: '#f87b23' }
+                },
+                '& .MuiInputLabel-root': {
+                  color: '#075364',
+                  '&.Mui-focused': { color: '#f87b23' }
+                }
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              margin="normal"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: 'rgba(7, 83, 100, 0.2)' },
+                  '&:hover fieldset': { borderColor: '#075364' },
+                  '&.Mui-focused fieldset': { borderColor: '#f87b23' }
+                },
+                '& .MuiInputLabel-root': {
+                  color: '#075364',
+                  '&.Mui-focused': { color: '#f87b23' }
+                }
+              }}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ 
+                mt: 3, 
+                mb: 2,
+                bgcolor: '#075364',
+                color: 'white',
+                py: 1.5,
+                '&:hover': {
+                  bgcolor: '#075364',
+                  color: '#f87b23'
+                }
+              }}
+            >
+              Login
+            </Button>
+          </form>
+
+          <Box sx={{ textAlign: 'center', mt: 2 }}>
+            <Button
+              component={RouterLink}
               to="/register"
               sx={{ 
                 color: '#075364',
@@ -139,10 +178,11 @@ export default function Login() {
               }}
             >
               Don't have an account? Register here
-            </Link>
+            </Button>
           </Box>
-        </form>
-      </Paper>
+        </Box>
+      </Box>
+
       <Dialog 
         open={snackbar.open}
         sx={{
@@ -151,7 +191,7 @@ export default function Login() {
             boxShadow: 'none',
             overflow: 'visible'
           },
-          '& .MuiBackdrop-root': {  // Remove dark backdrop
+          '& .MuiBackdrop-root': {  
             backgroundColor: 'transparent'
           }
         }}

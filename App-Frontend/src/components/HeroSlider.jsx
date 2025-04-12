@@ -35,7 +35,7 @@ export default function HeroSlider() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 7000); // Increased interval to 7 seconds
+    }, 7000); 
 
     return () => clearInterval(timer);
   }, []);

@@ -104,7 +104,7 @@ export default function ProductDetails() {
           gap: 4
         }}
       >
-        {/* Left Side - Image Container */}
+       
         <Grid 
           item 
           sx={{
@@ -132,7 +132,7 @@ export default function ProductDetails() {
               }}
               onClick={() => handleImageClick(0)}
             />
-            {/* Thumbnails */}
+           
             <Box sx={{ 
               display: 'flex', 
               gap: 2, 
@@ -145,8 +145,8 @@ export default function ProductDetails() {
                 src={getImageUrl(product.image)}
                 alt="main"
                 sx={{ 
-                  width: 100,  // Increased from 80
-                  height: 100, // Increased from 80
+                  width: 100,  
+                  height: 100, 
                   objectFit: 'contain',
                   cursor: 'pointer',
                   border: selectedImage === 0 ? '2px solid #f87b23' : '2px solid transparent',
@@ -165,8 +165,8 @@ export default function ProductDetails() {
                   src={getImageUrl(img)}
                   alt={`additional ${index + 1}`}
                   sx={{ 
-                    width: 100,  // Increased from 80
-                    height: 100, // Increased from 80
+                    width: 100,  
+                    height: 100, 
                     objectFit: 'contain',
                     cursor: 'pointer',
                     border: selectedImage === index + 1 ? '2px solid #f87b23' : '2px solid transparent',
@@ -183,7 +183,7 @@ export default function ProductDetails() {
           </Card>
         </Grid>
 
-        {/* Right Side - Details Container */}
+       
         <Grid 
           item 
           sx={{
@@ -235,7 +235,7 @@ export default function ProductDetails() {
               )}
             </Typography>
 
-            {/* Add Payment Methods Section */}
+           
             <Box sx={{ mt: 2, mb: 3 }}>
               <Typography variant="subtitle2" sx={{ color: '#075364', fontWeight: 600, mb: 1 }}>
                 Payment Methods:
@@ -389,7 +389,7 @@ export default function ProductDetails() {
       >
         <Box sx={{ 
           position: 'relative', 
-          backgroundColor: 'white', // Changed from black to white
+          backgroundColor: 'white', 
           height: '90vh',
           display: 'flex',
           alignItems: 'center',
@@ -401,8 +401,8 @@ export default function ProductDetails() {
               position: 'absolute',
               top: 8,
               right: 8,
-              color: '#075364', // Changed from white to theme color
-              bgcolor: 'rgba(248, 123, 35, 0.1)', // Light orange background
+              color: '#075364', 
+              bgcolor: 'rgba(248, 123, 35, 0.1)', 
               '&:hover': { 
                 bgcolor: 'rgba(248, 123, 35, 0.2)' 
               }
@@ -416,7 +416,7 @@ export default function ProductDetails() {
             sx={{
               position: 'absolute',
               left: 8,
-              color: '#075364', // Changed color
+              color: '#075364', 
               bgcolor: 'rgba(248, 123, 35, 0.1)',
               '&:hover': { 
                 bgcolor: 'rgba(248, 123, 35, 0.2)' 
@@ -442,7 +442,7 @@ export default function ProductDetails() {
             sx={{
               position: 'absolute',
               right: 8,
-              color: '#075364', // Changed color
+              color: '#075364', 
               bgcolor: 'rgba(248, 123, 35, 0.1)',
               '&:hover': { 
                 bgcolor: 'rgba(248, 123, 35, 0.2)' 

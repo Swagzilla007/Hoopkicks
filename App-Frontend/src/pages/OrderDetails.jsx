@@ -79,10 +79,10 @@ export default function OrderDetails() {
       </Typography>
 
       <Grid container spacing={4}>
-        {/* Left Side - Enhanced Customer & Shipping Info */}
+       
         <Grid item xs={12} md={4}>
           <Paper elevation={0} sx={{ 
-            p: 4, // Increased padding
+            p: 4, 
             borderRadius: '12px',
             border: '1px solid rgba(7, 83, 100, 0.1)',
             boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)',
@@ -233,7 +233,7 @@ export default function OrderDetails() {
           </Paper>
         </Grid>
 
-        {/* Right Side - Order Items */}
+       
         <Grid item xs={12} md={8}>
           <Paper elevation={0} sx={{ 
             p: 3,

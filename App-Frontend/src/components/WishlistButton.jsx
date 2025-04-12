@@ -21,7 +21,7 @@ export default function WishlistButton({ products }) {
     };
 
     loadWishlist();
-    // Add event listener for storage changes
+    
     window.addEventListener('storage', loadWishlist);
     window.addEventListener('wishlistUpdated', loadWishlist);
 
@@ -53,7 +53,7 @@ export default function WishlistButton({ products }) {
           badgeContent={wishlistedProducts.length} 
           sx={{
             '& .MuiBadge-badge': {
-              backgroundColor: '#075364', // Changed to theme green
+              backgroundColor: '#075364', 
               color: 'white'
             }
           }}
