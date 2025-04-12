@@ -46,15 +46,14 @@ const paymentMethods = {
 export default function Payment() {
   const navigate = useNavigate();
   const { clearCart } = useCart();
-  const [selectedMethod, setSelectedMethod] = useState('');
-  const [error, setError] = useState('');
-  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const { user } = useAuth();
+  const [error, setError] = useState('');
+  const [processing, setProcessing] = useState(false);
+  const [selectedMethod, setSelectedMethod] = useState('');
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
-  
   const orderData = JSON.parse(localStorage.getItem('orderData'));
 
-  
   if (!orderData) {
     navigate('/cart');
     return null;
@@ -67,6 +66,7 @@ export default function Payment() {
     }
 
     try {
+      setProcessing(true);
       const finalOrderData = {
         ...orderData,
         user: user.id,
@@ -75,18 +75,21 @@ export default function Payment() {
           orderData.totalAmount * 0.95 : orderData.totalAmount
       };
 
-      await orderAPI.createOrder(finalOrderData);
-      setShowSuccessDialog(true);
-
+      const response = await orderAPI.createOrder(finalOrderData);
       
-      setTimeout(() => {
-        clearCart();
-        localStorage.removeItem('orderData');
-        navigate('/');
-      }, 3000);
+      if (response.status === 201) {
+        setShowSuccessDialog(true);
+        setTimeout(() => {
+          clearCart();
+          localStorage.removeItem('orderData');
+          navigate('/');
+        }, 3000);
+      }
     } catch (error) {
       console.error('Payment error:', error);
       setError('Failed to process payment. Please try again.');
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -296,7 +299,7 @@ export default function Payment() {
                 fullWidth
                 size="large"
                 onClick={handlePaymentSubmit}
-                disabled={!selectedMethod}
+                disabled={!selectedMethod || processing}
                 sx={{
                   bgcolor: '#075364',
                   color: 'white',
@@ -307,7 +310,7 @@ export default function Payment() {
                   }
                 }}
               >
-                Complete Order
+                {processing ? 'Processing...' : 'Complete Order'}
               </Button>
             </Paper>
           </Box>

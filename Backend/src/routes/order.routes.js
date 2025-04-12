@@ -4,10 +4,6 @@ import { authenticateToken } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-// Ensure authentication for all order routes
-router.use(authenticateToken);
-
-// Create order route
-router.post('/', createOrder);
+router.post('/', authenticateToken, createOrder);  // Using authenticateToken instead of authenticate
 
 export default router;

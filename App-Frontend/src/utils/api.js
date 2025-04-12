@@ -34,6 +34,11 @@ export const adminAPI = {
 };
 
 export const orderAPI = {
-  createOrder: (orderData) => api.post('/orders', orderData),
+  createOrder: (orderData) => api.post('/orders', orderData, {
+    withCredentials: true,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }),
   getOrder: (id) => api.get(`/orders/${id}`),
 };
