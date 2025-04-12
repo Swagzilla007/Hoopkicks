@@ -63,22 +63,35 @@ export default function Register() {
   };
 
   return (
-    <Container maxWidth="md" sx={{ mt: 8, mb: 8 }}>
+    <Container 
+      maxWidth="md" 
+      sx={{ 
+        mt: 8, 
+        mb: 8,
+        minHeight: '80vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
       <Box sx={{
         width: '100%',
-        height: '600px',
+        minHeight: { xs: 'auto', md: '600px' },
         borderRadius: '24px',
         overflow: 'hidden',
         display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
         boxShadow: '8px 8px 0px rgba(7, 83, 100, 0.1)',
         border: '1px solid rgba(7, 83, 100, 0.1)'
       }}>
-        
+        {/* Logo Panel */}
         <Box sx={{
-          width: '50%',
+          width: { xs: '100%', md: '50%' },
+          minHeight: { xs: '200px', md: 'auto' },
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          p: 4
         }}>
           <Box
             component="img"
@@ -87,16 +100,17 @@ export default function Register() {
             sx={{
               width: '100%',
               height: '100%',
-              objectFit: 'contain'
+              objectFit: 'contain',
+              maxWidth: { xs: '250px', md: '300px' }
             }}
           />
         </Box>
 
-        
+        {/* Form Panel */}
         <Box sx={{
-          width: '50%',
+          width: { xs: '100%', md: '50%' },
           bgcolor: 'white',
-          p: 6,
+          p: { xs: 4, md: 6 },
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center'

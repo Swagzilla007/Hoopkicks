@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema({
     min: 0,
     validate: {
       validator: function(v) {
-        return v >= 0 && Number.isInteger(v); // Ensure price is a positive integer
+        return v >= 0 && Number.isInteger(v); 
       },
       message: 'Price must be a positive integer in LKR'
     }

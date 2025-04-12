@@ -1,5 +1,5 @@
 import { Box, Container, Typography, Grid, Link, IconButton, Stack } from '@mui/material';
-import { Facebook, Twitter, Instagram, YouTube } from '@mui/icons-material';
+import { Facebook, Twitter, Instagram, YouTube, LocationOn, Phone, Email } from '@mui/icons-material';
 
 export default function Footer() {
   return (
@@ -21,7 +21,7 @@ export default function Footer() {
               HoopKicks
             </Typography>
             <Typography variant="body1" sx={{ color: '#e0e0e0', mb: 3, fontSize: '1.1rem' }}>
-              Your one-stop shop for premium basketball footwear.
+              Your one-stop shop for premium sneakers.
             </Typography>
             
             {/* Social Media Icons */}
@@ -82,17 +82,25 @@ export default function Footer() {
             <Typography variant="h5" gutterBottom sx={{ color: 'white', fontWeight: 'bold', mb: 2 }}>
               Contact Us
             </Typography>
-            <Stack spacing={1.5} sx={{ color: '#e0e0e0' }}>
-              <Typography variant="body1" sx={{ fontSize: '1.1rem' }}>
-                Email: support@hoopkicks.com
-              </Typography>
-              <Typography variant="body1" sx={{ fontSize: '1.1rem' }}>
-                Phone: (123) 456-7890
-              </Typography>
-              <Typography variant="body1" sx={{ fontSize: '1.1rem' }}>
-                Address: 123 Sneaker Street,
-                <br />Basketball City, BC 12345
-              </Typography>
+            <Stack spacing={2}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <LocationOn sx={{ color: '#f87b23' }} />
+                <Typography sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                  No.1, Mugunuwatawana, Chilaw
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Phone sx={{ color: '#f87b23' }} />
+                <Typography sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                  +94 776390513
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Email sx={{ color: '#f87b23' }} />
+                <Typography sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                  wkgayathra@gmail.com
+                </Typography>
+              </Box>
             </Stack>
           </Grid>
         </Grid>

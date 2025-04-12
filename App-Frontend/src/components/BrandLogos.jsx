@@ -76,7 +76,8 @@ export default function BrandLogos() {
                 transition: 'all 0.3s ease',
                 '&:hover': {
                   transform: 'scale(1.1)',
-                  opacity: 1
+                  opacity: 1,
+                  filter: 'invert(56%) sepia(75%) saturate(1887%) hue-rotate(346deg) brightness(101%) contrast(96%)'
                 }
               }}
             />

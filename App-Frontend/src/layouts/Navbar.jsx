@@ -402,11 +402,11 @@ export default function Navbar() {
           </MenuItem>
 
           {/* Navigation Links - Updated Styling */}
-          {['Men', 'Women', 'About Us'].map((item, index) => (
+          {['Men', 'Women', 'About'].map((item) => (
             <MenuItem 
               key={item}
               component={Link} 
-              to={`/${item.toLowerCase().replace(' ', '-')}`}
+              to={`/${item.toLowerCase()}`}  // Changed from 'about-us' to 'about'
               onClick={handleMobileMenuClose}
               sx={{ 
                 p: 2,
@@ -419,7 +419,7 @@ export default function Navbar() {
                 }
               }}
             >
-              {item}
+              {item === 'About' ? 'About Us' : item} {/* Display "About Us" but use "about" for route */}
             </MenuItem>
           ))}
 

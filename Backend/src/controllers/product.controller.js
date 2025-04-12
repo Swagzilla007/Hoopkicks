@@ -7,7 +7,7 @@ export const getAllProducts = async (req, res) => {
     
     let query = {};
     
-    // Apply filters if they exist
+    
     if (brand) {
       query.brand = brand;
     }
@@ -45,7 +45,7 @@ export const getProductsByCategory = async (req, res) => {
     
     let query = { category };
     
-    // Apply additional filters
+    
     if (brand) {
       query.brand = brand;
     }

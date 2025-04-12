@@ -30,9 +30,9 @@ export const updateOrder = async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    // Only add to history if status is different from current status
+   
     if (status !== order.status) {
-      // Add new status to history
+      
       if (!order.statusHistory) {
         order.statusHistory = [];
       }
@@ -41,7 +41,7 @@ export const updateOrder = async (req, res) => {
         date: new Date()
       });
       
-      // Update the current status
+      
       order.status = status;
       await order.save();
     }
@@ -61,13 +61,13 @@ export const createProduct = async (req, res) => {
         size: Number(size.size),
         stock: Number(size.stock)
       })),
-      // Ensure image path starts with http or /assets
+      
       image: req.body.image.startsWith('http') 
         ? req.body.image 
         : !req.body.image.startsWith('/assets')
           ? `/assets/products/${req.body.image}`
           : req.body.image,
-      // Handle additional images similarly
+      
       additionalImages: req.body.additionalImages?.map(img => 
         img.startsWith('http') 
           ? img 
@@ -95,7 +95,7 @@ export const updateProduct = async (req, res) => {
       }))
     };
     
-    // Ensure image path starts with http
+    
     if (updateData.image && !updateData.image.startsWith('http')) {
       updateData.image = `http://localhost:5000${updateData.image}`;
     }
@@ -142,7 +142,7 @@ export const getDashboardStats = async (req, res) => {
       totalOrders: orders.length,
       pendingOrders: orders.filter(order => order.status === 'pending').length,
       revenue: orders.reduce((total, order) => total + order.totalAmount, 0),
-      currency: 'LKR' // Add currency indicator
+      currency: 'LKR' 
     };
 
     res.json(stats);
@@ -157,7 +157,7 @@ export const uploadImage = async (req, res) => {
       return res.status(400).json({ message: 'No file uploaded' });
     }
     
-    // Return the path relative to the server root
+    
     const imagePath = `/assets/products/${req.file.filename}`;
     res.json({ imagePath });
   } catch (error) {
@@ -174,7 +174,7 @@ export const deleteOrder = async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    // Restore product stock quantities by size
+    
     for (const item of order.items) {
       const product = await Product.findById(item.product);
       if (product) {

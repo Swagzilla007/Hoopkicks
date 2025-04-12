@@ -1,6 +1,7 @@
 import { Container, Typography, Box, Paper, Avatar, Rating, Grid } from '@mui/material';
 import storeImage from '../assets/images/storeimage.jpg';
 import { FormatQuote } from '@mui/icons-material';
+import nikeGif from '../assets/images/nikegif.gif';
 
 const reviews = [
   {
@@ -259,6 +260,29 @@ export default function AboutUs() {
             </Grid>
           ))}
         </Grid>
+
+        {/* Nike Gif */}
+        <Box 
+          sx={{ 
+            width: '100%', 
+            display: 'flex', 
+            justifyContent: 'center',
+            mt: 6 
+          }}
+        >
+          <Box
+            component="img"
+            src={nikeGif}
+            alt="Nike Animation"
+            sx={{
+              width: '40%',
+              height: 'auto',
+              borderRadius: '12px',
+              boxShadow: '8px 8px 0px rgba(0, 0, 0, 0.2)',
+              display: { xs: 'none', md: 'block' }
+            }}
+          />
+        </Box>
       </Box>
     </Container>
   );
