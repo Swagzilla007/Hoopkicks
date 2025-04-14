@@ -97,9 +97,4 @@ Default admin credentials:
 ## Contact
 
 - Email: wkgayathra@gmail.com
-- Phone: +94 776390513
-- Address: No.1, Mugunuwatawana, Chilaw
-
-## License
-
-© 2025 HoopKicks. All rights reserved.
+- Phone: +94776390513
