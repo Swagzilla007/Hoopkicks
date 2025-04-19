@@ -96,13 +96,13 @@ Default admin credentials:
 
 ## Screenshots
 
-![](/Screenshots/screenshot-148.png)
-![](/Screenshots/screenshot-150.png)
-![](/Screenshots/screenshot-152.png)
-![](/Screenshots/screenshot-160.png)
-![](/Screenshots/screenshot-163.png)
-![](/Screenshots/screenshot-164.png)
-![](/Screenshots/screenshot-173.png)
+![](<Screenshots\Screenshot-(148).png>)
+![](<Screenshots\Screenshot-(150).png>)
+![](<Screenshots\Screenshot-(152).png>)
+![](<Screenshots\Screenshot-(160).png>)
+![](<Screenshots\Screenshot-(163).png>)
+![](<Screenshots\Screenshot-(164).png>)
+![](<Screenshots\Screenshot-(173).png>)
 
 ## Contact
 
