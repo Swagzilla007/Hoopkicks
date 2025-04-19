@@ -92,7 +92,12 @@ npm run dev
 Default admin credentials:
 
 - Email: admin@hoopkicks.com
-- Password: admin123
+- Password: 12345
+
+##User setup
+
+- Email-wkgayathra@gmail.com
+- password-12345
 
 ## Screenshots
 
