@@ -101,13 +101,13 @@ Default admin credentials:
 
 ## Screenshots
 
-![](<Screenshots\Screenshot-(148).png>)
-![](<Screenshots\Screenshot-(150).png>)
-![](<Screenshots\Screenshot-(152).png>)
-![](<Screenshots\Screenshot-(160).png>)
-![](<Screenshots\Screenshot-(163).png>)
-![](<Screenshots\Screenshot-(164).png>)
-![](<Screenshots\Screenshot-(173).png>)
+![](<Screenshots/Screenshot-(148).png>)
+![](<Screenshots/Screenshot-(150).png>)
+![](<Screenshots/Screenshot-(152).png>)
+![](<Screenshots/Screenshot-(160).png>)
+![](<Screenshots/Screenshot-(163).png>)
+![](<Screenshots/Screenshot-(164).png>)
+![](<Screenshots/Screenshot-(173).png>)
 
 ## Contact
 
